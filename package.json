@@ -4,6 +4,7 @@
   "description": "a reading list website",
   "main": "index.js",
   "scripts": {
+    "serve": "node index.js",
     "test": "mocha",
     "lint": "eslint index.js tests/**"
   },
