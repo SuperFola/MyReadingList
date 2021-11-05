@@ -1,0 +1,27 @@
+{
+  "name": "myreadinglist",
+  "version": "1.0.0",
+  "description": "a reading list website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint index.js src/**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuperFola/MyReadingList.git"
+  },
+  "author": "Alexandre Plateau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SuperFola/MyReadingList/issues"
+  },
+  "homepage": "https://github.com/SuperFola/MyReadingList#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1"
+  }
+}
