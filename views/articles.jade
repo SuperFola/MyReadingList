@@ -3,24 +3,34 @@ extends layout
 block content
   h1 Articles
   div
-    each data in articles
-      div
-        h2
-          a(href= data.url)= data.title
-          span= data.url
-        p
-          | #{data.length}
-          if data.read
-            |  (Read),
-          else
-            |  (Not read),
-          |  Added on #{data.added_on.toDateString()}
+    if articles.length > 0
+      - console.log(articles)
+      each data in articles
         div
-          each tag in data.tags
-            -
-              let selected_tag = tags.filter(r => r.id === tag)[0]
-              let color = Number(selected_tag.color).toString(16).padStart(6, "0")
-              let name = selected_tag.name
-            span(style='background-color: #' + color)= name
-          h3 Notes
-          p #{data.notes}
+          h2
+            a(href= data.url)= data.title
+            span= data.url
+          p
+            | #{data.length}
+            if data.read
+              |  (Read),
+            else
+              |  (Not read),
+            |  Added on #{data.added_on.toDateString()}
+          div
+            each tag in data.tags
+              -
+                let selected_tag = tags.filter(r => r.id === tag)[0]
+                let color = Number(selected_tag.color).toString(16).padStart(6, "0")
+                let name = selected_tag.name
+              span(style='background-color: #' + color)= name
+            h3 Notes
+            p #{data.notes}
+            hr
+      p Page #{currentPage} / #{totalPages}
+      if currentPage > 1
+        a(href="/articles?page=" + (currentPage - 1)): span Previous
+      if currentPage < totalPages
+        a(href="/articles?page=" + (currentPage + 1)): span Next
+    else
+      p No articles

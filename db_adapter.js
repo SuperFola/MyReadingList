@@ -9,6 +9,10 @@ class Database {
         return data.filter(req)
     }
 
+    count(table, req) {
+        return this.select(table, req).length
+    }
+
     insert(table, ...data) {
         if (this.db.hasOwnProperty(table)) {
             Array.prototype.unshift.apply(this.db, data)
