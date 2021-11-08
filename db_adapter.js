@@ -2,6 +2,7 @@ class Database {
     constructor() {
         // TODO change me to use an on-disk database instead of an in-memory one
         this.db = require("./fake_db")
+        this.auto_increment = Object.values(this.db).map(v => v.length).reduce((a, b) => a + b)
     }
 
     select(table, req) {
@@ -15,7 +16,14 @@ class Database {
 
     insert(table, ...data) {
         if (this.db.hasOwnProperty(table)) {
-            Array.prototype.unshift.apply(this.db, data)
+            data.forEach(val => {
+                this.db[table].push({
+                    id: this.auto_increment,
+                    ...val
+                })
+                this.auto_increment += 1
+            })
+            console.log(this.db)
         } else {
             this.db[table] = data
         }

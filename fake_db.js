@@ -13,6 +13,7 @@ module.exports = {
     ],
     articles: [
         {
+            id: 0,
             title: "Foo",
             tags: [0xdeadbeef, 0xc0ffee],
             read: false,
@@ -22,6 +23,7 @@ module.exports = {
             added_on: new Date('September 22, 2018 15:00:00'),
         },
         {
+            id: 1,
             title: "Egg",
             tags: [0xc0ffee],
             read: false,
