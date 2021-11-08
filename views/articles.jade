@@ -2,4 +2,25 @@ extends layout
 
 block content
   h1 Articles
-  p test
+  div
+    each data in articles
+      div
+        h2
+          a(href= data.url)= data.title
+          span= data.url
+        p
+          | #{data.length}
+          if data.read
+            |  (Read),
+          else
+            |  (Not read),
+          |  Added on #{data.added_on.toDateString()}
+        div
+          each tag in data.tags
+            -
+              let selected_tag = tags.filter(r => r.id === tag)[0]
+              let color = Number(selected_tag.color).toString(16).padStart(6, "0")
+              let name = selected_tag.name
+            span(style='background-color: #' + color)= name
+          h3 Notes
+          p #{data.notes}
