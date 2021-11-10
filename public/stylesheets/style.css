@@ -156,6 +156,10 @@ td {
   font-size: large;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 input, textarea, .tags-input {
   border: 2px solid #dfdfdf;
   border-radius: 10px;

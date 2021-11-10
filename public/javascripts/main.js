@@ -269,7 +269,7 @@ async function edit_note(articleID) {
     function create_delete_tag_btn(el) {
         let span = document.createElement("span")
         span.innerHTML = "&times;"
-        span.classList.add("tag_delete", "tag_bubble")
+        span.classList.add("tag_delete", "tag_bubble", "pointer")
         span.onclick = _ => el.remove()
         el.appendChild(span)
     }
@@ -279,14 +279,14 @@ async function edit_note(articleID) {
 
         let add_btn = document.createElement("span")
         add_btn.innerHTML = "&plus;"
-        add_btn.classList.add("tag_add", "tag_bubble")
+        add_btn.classList.add("tag_add", "tag_bubble", "pointer")
         add_btn.onclick = _ => {
             const tag_name = prompt("New tag to add")
             if (tag_name.trim().length !== 0) {
                 let span = document.createElement("span")
                 span.classList.add("tag")
                 span.style.backgroundColor = "ffffff"
-                span.innerText = tag_name
+                span.innerHTML= `<a href="/articles/tagged/${tag_name}">${tag_name}</a>`
 
                 create_delete_tag_btn(span)
 
@@ -304,7 +304,6 @@ async function edit_note(articleID) {
         inner_notes.style.backgroundColor = ""
 
         Array.from(tags.children).forEach(el => {
-            console.log(el.children)
             if (el.children.length > 1) {
                 el.children[1].remove()
             }

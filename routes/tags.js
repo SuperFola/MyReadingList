@@ -35,15 +35,24 @@ router.post('/add', async (req, res) => {
         const db = req.app.get("db")
 
         if (isValidColor(req.body.color)) {
-            const ids = await db.insert("tags", {
-                name: req.body.name,
-                color: req.body.color,
-            })
+            const existing = await db.select("tags", t => t.name === req.body.name)
 
-            res.json({
-                status: "ok",
-                updated: ids,
-            })
+            if (existing.length === 0) {
+                const ids = await db.insert("tags", {
+                    name: req.body.name,
+                    color: req.body.color,
+                })
+
+                res.json({
+                    status: "ok",
+                    updated: ids,
+                })
+            } else {
+                res.status(codes.errors.conflict).json({
+                    status: "Error",
+                    message: `The tag ${req.body.name} already exists. Delete it before trying to add it again`,
+                })
+            }
         } else {
             res.status(codes.errors.precondition_failed).json({
                 status: "Error",
@@ -64,6 +73,11 @@ router.delete('/:id', async (req, res) => {
 
     try {
         await db.delete("tags", val => val.name === id)
+        await db.update(
+            "articles",
+            val => val.tags.includes(id),
+            val => { return { ...val, tags: val.tags.filter(t => t !== id) } },
+        )
         res.json({
             status: "OK",
             deleted: id,

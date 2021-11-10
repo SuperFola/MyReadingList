@@ -7,14 +7,14 @@ block content
       h2.title
         a(href= data.url, target="_blank")= data.title
         span.url= data.url
-        span.delete_article(onclick="delete_article('" + data.id + "')") &times;
+        span.pointer.delete_article(onclick="delete_article('" + data.id + "')") &times;
       div.metadata
         span= data.length
         span(onclick="article_change_state(" + data.read + ", " + data.id + ")")
           if data.read
-              span.read Read
+              span.pointer.read Read
           else
-            span.not_read Not read
+            span.pointer.not_read Not read
         span Added on #{data.added_on.toLocaleDateString()}
       div.tags
         - for (const tag of data.tags)
@@ -23,7 +23,7 @@ block content
       div.notes
         h3 Notes
         pre.inner_notes #{data.notes}
-        span.edit_note(onclick="edit_note(" + data.id + ")") 📝
+        span.pointer.edit_note(onclick="edit_note(" + data.id + ")") 📝
 
   if articles.length === 0
     p No articles
