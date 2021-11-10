@@ -1,8 +1,83 @@
+html, body, .container {
+  height: 100%;
+}
+
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  min-height: 100%;
+}
+
+.container {
+  position: relative;
+  padding: 25px;
+  height: auto;
+  min-height: 100%;
 }
 
 a {
   color: #00B7FF;
+}
+
+.article {
+  background-color: rgb(250, 248, 245);
+}
+
+.title {
+  margin-bottom: 0;
+}
+
+.title > span {
+  font-size: small;
+  color: #aaa;
+  margin-left: 1em;
+}
+
+.metadata > span {
+  padding-right: 1em;
+}
+
+.metadata .read {
+  color: rgb(144, 181, 82);
+}
+
+.metadata .not_read {
+  color: lightcoral;
+}
+
+.tags {
+  float: right;
+}
+
+.tag {
+  border-radius: 10%;
+  padding: 0.2em;
+  margin: 5px;
+}
+
+.navigation {
+  text-align: center;
+}
+
+button#add {
+  position: fixed;
+  right: 1em;
+  bottom: 3em;
+  border: none;
+  border-radius: 50%;
+  background-color: rgb(50, 147, 243);
+  width: 2em;
+  height: 2em;
+  font-size: large;
+  color: antiquewhite;
+  justify-content: center;
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  bottom: -1em;
+  width: 100%;
+  text-align: center;
+  background-color: antiquewhite;
 }

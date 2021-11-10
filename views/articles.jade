@@ -2,30 +2,36 @@ extends layout
 
 block content
   h1 Articles
-  div
-    - for (const data of articles)
-      div
-        h2
-          a(href= data.url)= data.title
-          span= data.url
+  - for (const data of articles)
+    div.article
+      h2.title
+        a(href= data.url, target="_blank")= data.title
+        span= data.url
+      div.metadata
         span= data.length
         if data.read
-            span Read
+            span.read Read
         else
-          span Not read
-        span Added on #{data.added_on.toDateString()}
-        div
-          - for (const tag of data.tags)
-            - let color = (tags.filter(r => r.name === tag).map(t => t.color)[0] ?? "ffffff")
-            span(style='background-color: #' + color)= tag
-          if data.notes.trim().length > 0
-            h3 Notes
-            p #{data.notes}
-          hr
-      p Page #{currentPage} / #{totalPages}
-      if currentPage > 1
-        a(href="/articles?page=" + (currentPage - 1)): span Previous
-      if currentPage < totalPages
-        a(href="/articles?page=" + (currentPage + 1)): span Next
-    if articles.length === 0
-      p No articles
+          span.not_read Not read
+        span Added on #{data.added_on.toLocaleDateString()}
+      div.tags
+        - for (const tag of data.tags)
+          - let color = (tags.filter(r => r.name === tag).map(t => t.color)[0] ?? "ffffff")
+          span(style='background-color: #' + color).tag= tag
+      if data.notes.trim().length > 0
+        div.notes
+          h3 Notes
+          p #{data.notes}
+      hr
+
+  if articles.length === 0
+    p No articles
+
+  div.navigation
+    p Page #{currentPage} / #{totalPages}
+    if currentPage > 1
+      a(href="/articles?page=" + (currentPage - 1)): span Previous
+    if currentPage < totalPages
+      a(href="/articles?page=" + (currentPage + 1)): span Next
+
+  button#add(onclick="add_article()"): +
