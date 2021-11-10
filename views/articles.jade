@@ -5,24 +5,24 @@ block content
   div
     - for (const data of articles)
       div
-          h2
-            a(href= data.url)= data.title
-            span= data.url
-          span= data.length
-          if data.read
-              span Read
-          else
-            span Not read
-          span Added on #{data.added_on.toDateString()}
-          div
-            - for (const tag of data.tags)
-              - let selected_tag = tags.filter(r => r.name === tag)[0]
-              - let color = Number(selected_tag.color).toString(16).padStart(6, "0")
-              span(style='background-color: #' + color)= tag
-            if data.notes.trim().length > 0
-              h3 Notes
-              p #{data.notes}
-            hr
+        h2
+          a(href= data.url)= data.title
+          span= data.url
+        span= data.length
+        if data.read
+            span Read
+        else
+          span Not read
+        span Added on #{data.added_on.toDateString()}
+        div
+          - for (const tag of data.tags)
+            - let selected_tag = tags.filter(r => r.name === tag)[0]
+            - let color = Number(selected_tag.color).toString(16).padStart(6, "0")
+            span(style='background-color: #' + color)= tag
+          if data.notes.trim().length > 0
+            h3 Notes
+            p #{data.notes}
+          hr
       p Page #{currentPage} / #{totalPages}
       if currentPage > 1
         a(href="/articles?page=" + (currentPage - 1)): span Previous

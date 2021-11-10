@@ -1,8 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (_, res) => {
-    res.render('tags', { title: 'Express' })
+router.get('/', async (req, res) => {
+    const db = req.app.get("db")
+
+    res.render('tags', {
+        title: 'Express',
+        tags: await db.select('tags', _ => true),
+    })
 })
 
 router.post('/add', _ => {

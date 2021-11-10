@@ -2,4 +2,11 @@ extends layout
 
 block content
   h1 Tags
-  p test
+  div
+    - for (const data of tags)
+      - let color = Number(data.color).toString(16).padStart(6, "0")
+      div
+        span(style='background-color: #' + color)= data.name
+    if tags.length === 0
+      p No tag
+
