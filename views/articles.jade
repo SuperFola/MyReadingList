@@ -22,7 +22,7 @@ block content
       div.notes
         h3 Notes
         if data.notes.trim().length > 0
-          p #{data.notes}
+          pre.inner_notes #{data.notes}
         span.edit_note(onclick="edit_note(" + data.id + ")") 📝
 
   if articles.length === 0
