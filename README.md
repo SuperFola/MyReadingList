@@ -14,7 +14,7 @@ Parameters written in *italic text* are optional.
 POST JSON to `/articles/add`:
 - **title** (string)
 - **url** (string)
-- **tags** (list of strings, can be empty)
+- *tags* (list of strings, can be empty)
 
 Example:
 ```powershell

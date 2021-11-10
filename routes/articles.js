@@ -63,14 +63,14 @@ router.get('/list', async (req, res) => {
 })
 
 router.post('/add', async (req, res) => {
-    const NeededParams = ["title", "tags", "url"]
+    const NeededParams = ["title", "url"]
 
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
         const db = req.app.get("db")
 
         const ids = await db.insert("articles", {
             title: req.body.title,
-            tags: req.body.tags,
+            tags: req.body.tags ?? [],
             url: req.body.url,
             added_on: new Date(),
             read: req.body.read ?? false,

@@ -102,6 +102,10 @@ a {
   position: relative;
 }
 
+.inner_notes {
+  width: 90%;
+}
+
 .edit_note {
   position: absolute;
   right: 0.5em;
