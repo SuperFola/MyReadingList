@@ -33,6 +33,7 @@ async function before_submit_article() {
 
     if (res) {
         close_add_article()
+        window.location.reload(true)
     }
 }
 
@@ -150,6 +151,7 @@ async function delete_article(articleID) {
         const res = req.json()
         if (res) {
             alert("Success")
+            window.location.reload(true)
         }
     }
 }
@@ -183,6 +185,7 @@ async function before_submit_tag() {
 
     if (res) {
         close_add_tag()
+        window.location.reload(true)
     }
 }
 
