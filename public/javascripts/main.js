@@ -257,10 +257,12 @@ async function edit_note(articleID) {
         })
 
         inner_notes.contentEditable = true
+        inner_notes.style.backgroundColor = "rgb(180, 178, 180)"
         focus_ce(inner_notes)
     } else {
         // save
         inner_notes.contentEditable = false
+        inner_notes.style.backgroundColor = ""
 
         Array.from(tags.children).forEach(el => {
             el.children[1].remove()
