@@ -244,14 +244,27 @@ function close_add_tag() {
 
 async function edit_note(articleID) {
     let div = document.getElementById(`article-${articleID}`)
+    let tags = div.children[2]
     let inner_notes = div.children[3].children[1]
 
     if (!["true", true].includes(inner_notes.contentEditable)) {
+        Array.from(tags.children).forEach(el => {
+            let span = document.createElement("span")
+            span.innerHTML = "&times;"
+            span.classList.add("tag_delete")
+            span.onclick = _ => el.remove()
+            el.appendChild(span)
+        })
+
         inner_notes.contentEditable = true
         focus_ce(inner_notes)
     } else {
         // save
         inner_notes.contentEditable = false
+
+        Array.from(tags.children).forEach(el => {
+            el.children[1].remove()
+        })
 
         await fetch(`/articles/${articleID}`, {
             method: "PATCH",
@@ -260,6 +273,7 @@ async function edit_note(articleID) {
             },
             body: JSON.stringify({
                 notes: inner_notes.innerText,
+                tags: Array.from(tags.children).map(el => el.innerText),
             }),
         })
     }

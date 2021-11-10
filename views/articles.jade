@@ -6,7 +6,7 @@ block content
     div(id="article-" + data.id).article
       h2.title
         a(href= data.url, target="_blank")= data.title
-        span= data.url
+        span.url= data.url
         span.delete_article(onclick="delete_article('" + data.id + "')") &times;
       div.metadata
         span= data.length
