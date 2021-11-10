@@ -1,7 +1,11 @@
 function focus_ce(node) {
     let setpos = document.createRange()
     let set = window.getSelection()
-    setpos.setStart(node.childNodes[0], node.innerText.length)
+    let start = node.innerText.length
+    if (node.childNodes[0].innerText === "⠀") {
+        start = 0
+    }
+    setpos.setStart(node.childNodes[0], start)
     setpos.collapse(true)
     set.removeAllRanges()
     set.addRange(setpos)
@@ -26,7 +30,7 @@ async function before_submit_article() {
             tags: tags,
             title: title,
             url: url,
-            notes: notes,
+            notes: notes.trim().length === 0 ? "⠀" : notes,
         }),
     })
     const res = await req.json()
@@ -43,6 +47,8 @@ function add_article() {
     } else {
         return
     }
+
+    window.scrollTo(0, -9999);
 
     let new_node = document.createElement("div")
     new_node.setAttribute("id", "add_article")

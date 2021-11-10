@@ -22,8 +22,7 @@ block content
           span(style='background-color: #' + color).tag: a(href='/articles/tagged/' + tag)= tag
       div.notes
         h3 Notes
-        if data.notes.trim().length > 0
-          pre.inner_notes #{data.notes}
+        pre.inner_notes #{data.notes}
         span.edit_note(onclick="edit_note(" + data.id + ")") 📝
 
   if articles.length === 0
