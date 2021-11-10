@@ -63,6 +63,10 @@ a {
   margin-left: 1em;
 }
 
+.delete_article {
+  float: right;
+}
+
 .metadata {
   margin-bottom: 0.5em;
 }

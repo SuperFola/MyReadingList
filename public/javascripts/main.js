@@ -142,6 +142,18 @@ async function article_change_state(currentState, articleID) {
     }
 }
 
+async function delete_article(articleID) {
+    if (confirm("Are you sure you want to delete this article?")) {
+        const req = await fetch(`/articles/${articleID}`, {
+            method: "DELETE",
+        })
+        const res = req.json()
+        if (res) {
+            alert("Success")
+        }
+    }
+}
+
 async function before_submit_tag() {
     const name = document.getElementById("name").value
     const color = document.getElementById("color").value.slice(1)
