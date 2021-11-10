@@ -99,8 +99,7 @@ a {
   margin: 5px;
 }
 
-.tag_delete {
-  background-color: crimson;
+.tag_bubble {
   display: inline-block;
   width: 1.2em;
   height: 1.2em;
@@ -108,6 +107,14 @@ a {
   color: white;
   margin-left: 0.4em;
   border-radius: 50%;
+}
+
+.tag_delete {
+  background-color: crimson;
+}
+
+.tag_add {
+  background-color: #04AA6D;
 }
 
 .tag > a {
@@ -139,6 +146,14 @@ table {
 
 td {
   padding: 0.3em;
+}
+
+.red {
+  color: red;
+}
+
+.big {
+  font-size: large;
 }
 
 input, textarea, .tags-input {

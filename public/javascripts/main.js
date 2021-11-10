@@ -162,6 +162,19 @@ async function delete_article(articleID) {
     }
 }
 
+async function delete_tag(tagID) {
+    if (confirm(`Are you sure you want to delete this tag (${tagID})?`)) {
+        const req = await fetch(`/tags/${tagID}`, {
+            method: "DELETE",
+        })
+        const res = req.json()
+        if (res) {
+            alert("Success")
+            window.location.reload(true)
+        }
+    }
+}
+
 async function before_submit_tag() {
     const name = document.getElementById("name").value
     const color = document.getElementById("color").value.slice(1)
@@ -253,14 +266,34 @@ async function edit_note(articleID) {
     let tags = div.children[2]
     let inner_notes = div.children[3].children[1]
 
+    function create_delete_tag_btn(el) {
+        let span = document.createElement("span")
+        span.innerHTML = "&times;"
+        span.classList.add("tag_delete", "tag_bubble")
+        span.onclick = _ => el.remove()
+        el.appendChild(span)
+    }
+
     if (!["true", true].includes(inner_notes.contentEditable)) {
-        Array.from(tags.children).forEach(el => {
-            let span = document.createElement("span")
-            span.innerHTML = "&times;"
-            span.classList.add("tag_delete")
-            span.onclick = _ => el.remove()
-            el.appendChild(span)
-        })
+        Array.from(tags.children).forEach(create_delete_tag_btn)
+
+        let add_btn = document.createElement("span")
+        add_btn.innerHTML = "&plus;"
+        add_btn.classList.add("tag_add", "tag_bubble")
+        add_btn.onclick = _ => {
+            const tag_name = prompt("New tag to add")
+            if (tag_name.trim().length !== 0) {
+                let span = document.createElement("span")
+                span.classList.add("tag")
+                span.style.backgroundColor = "ffffff"
+                span.innerText = tag_name
+
+                create_delete_tag_btn(span)
+
+                tags.insertBefore(span, add_btn)
+            }
+        }
+        tags.appendChild(add_btn)
 
         inner_notes.contentEditable = true
         inner_notes.style.backgroundColor = "rgb(180, 178, 180)"
@@ -271,8 +304,12 @@ async function edit_note(articleID) {
         inner_notes.style.backgroundColor = ""
 
         Array.from(tags.children).forEach(el => {
-            el.children[1].remove()
+            console.log(el.children)
+            if (el.children.length > 1) {
+                el.children[1].remove()
+            }
         })
+        tags.children[tags.children.length - 1].remove()
 
         await fetch(`/articles/${articleID}`, {
             method: "PATCH",

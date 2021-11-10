@@ -23,6 +23,21 @@ async function calculateLength(url) {
     return `${time} min`
 }
 
+async function registerTags(tags) {
+    tags.forEach(tag => {
+        fetch(`http://localhost:${process.env.PORT}/tags/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: tag,
+                color: "ffffff",
+            }),
+        })
+    })
+}
+
 router.get('/', async (req, res) => {
     const currentPage = parseInt(req.query.page ?? "1")
     const db = req.app.get("db")
@@ -85,19 +100,9 @@ router.post('/add', async (req, res) => {
             length: await calculateLength(req.body.url),
         })
 
-        req.body.tags.forEach(tag => {
-            fetch(`http://localhost:${process.env.PORT}/tags/add`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name: tag,
-                    color: "ffffff",
-                }),
-            }).then(text => text.json())
-            .then(json => console.log(json))
-        })
+        if ("tags" in req.body) {
+            registerTags(req.body.tags)
+        }
 
         res.json({
             status: "ok",
@@ -162,6 +167,11 @@ router.patch('/:id', async (req, res) => {
                     return { ...val, ...to_update }
                 },
             )
+
+            if ("tags" in req.body) {
+                registerTags(req.body.tags)
+            }
+
             res.json({
                 status: "OK",
                 updated: id,
