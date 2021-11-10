@@ -16,8 +16,8 @@ block content
         span Added on #{data.added_on.toDateString()}
         div
           - for (const tag of data.tags)
-            - let selected_tag = tags.filter(r => r.name === tag)[0]
-            span(style='background-color: #' + selected_tag.color)= tag
+            - let color = (tags.filter(r => r.name === tag).map(t => t.color)[0] ?? "ffffff")
+            span(style='background-color: #' + color)= tag
           if data.notes.trim().length > 0
             h3 Notes
             p #{data.notes}

@@ -58,3 +58,48 @@ Example:
 ```powershell
 (curl http://localhost:3000/articles/0 -Method PATCH -H @{"Content-Type"="application/json"} -Body '{"not_an_attribute": "hello", "read": true}').Content
 ```
+
+### Tags
+
+#### Add a tag
+
+POST JSON to `/tags/add`:
+- **name** (string)
+- **color** (string), must be a valid hexcolor
+
+Example:
+```powershell
+(curl "http://localhost:3000/tags/add" -Method POST -H @{"Content-Type"="application/json"} -Body '{"name": "foo", "color": "012345"}').Content
+```
+
+#### List all
+
+GET JSON from `/tags/list`.
+
+Example:
+```powershell
+(curl "http://localhost:3000/tags/list" -Method GET).Content
+```
+
+#### Remove a tag
+
+DELETE `/tags/:id`:
+- **id** (string)
+
+Example:
+```powershell
+(curl "http://localhost:3000/tags/coffee" -Method DELETE).Content
+```
+
+#### Update a tag
+
+PATCH JSON to `/tags/:id`:
+- *name* (string), be careful when modifying this as it can break all the articles using said tag
+- *color* (string), must be a valid hexcolor
+
+Note: unknown attributes are simply deleted
+
+Example:
+```powershell
+(curl http://localhost:3000/tags/coffee -Method PATCH -H @{"Content-Type"="application/json"} -Body '{"not_an_attribute": "hello", "color": "ff0000"}').Content
+```
