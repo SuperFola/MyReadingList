@@ -31,6 +31,14 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get('/list', (req, res) => {
+    const currentPage = parseInt(req.query.page ?? "1")
+    const quantity = parseInt(req.query.quantity ?? MaxPerPage)
+    const db = req.app.get("db")
+
+    res.send(db.select('articles', pagger(currentPage, quantity)))
+})
+
 router.post('/add', async (req, res) => {
     const NeededParams = ["title", "tags", "url"]
 
