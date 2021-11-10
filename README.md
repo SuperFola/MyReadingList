@@ -34,17 +34,17 @@ Example:
 
 #### Remove article
 
-GET JSON from `/articles/remove/:id`:
+DELETE `/articles/:id`:
 - **id** (integer)
 
 Example:
 ```powershell
-(curl "http://localhost:3000/articles/remove/0" -Method GET).Content
+(curl "http://localhost:3000/articles/0" -Method DELETE).Content
 ```
 
 #### Update article
 
-PATCH JSON to `/articles/update/:id`:
+PATCH JSON to `/articles/:id`:
 - **id** (integer)
 - *title* (string)
 - *tags* (list of strings)
@@ -56,5 +56,5 @@ Note: unknown attributes are simply deleted
 
 Example:
 ```powershell
-(curl http://localhost:3000/articles/update/0 -Method PATCH -H @{"Content-Type"="application/json"} -Body '{"not_an_attribute": "hello", "read": true}').Content
+(curl http://localhost:3000/articles/0 -Method PATCH -H @{"Content-Type"="application/json"} -Body '{"not_an_attribute": "hello", "read": true}').Content
 ```

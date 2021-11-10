@@ -71,7 +71,7 @@ router.post('/add', async (req, res) => {
     }
 })
 
-router.get('/remove/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     const id = parseInt(req.params.id)
     const db = req.app.get("db")
 
@@ -96,7 +96,7 @@ router.get('/remove/:id', async (req, res) => {
     }
 })
 
-router.patch('/update/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
     const id = parseInt(req.params.id)
     const db = req.app.get("db")
 
