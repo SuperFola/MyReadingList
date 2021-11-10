@@ -62,6 +62,13 @@ router.get('/list', async (req, res) => {
     res.json(await db.select('articles', pagger(currentPage, quantity)))
 })
 
+router.get('/:id', async (req, res) => {
+    const db = req.app.get("db")
+    const id = parseInt(req.params.id)
+    const data = await db.select('articles', v => v.id === id)
+    res.json(data[0])
+})
+
 router.post('/add', async (req, res) => {
     const NeededParams = ["title", "url"]
 
@@ -76,6 +83,20 @@ router.post('/add', async (req, res) => {
             read: req.body.read ?? false,
             notes: req.body.notes ?? "",
             length: await calculateLength(req.body.url),
+        })
+
+        req.body.tags.forEach(tag => {
+            fetch(`http://localhost:${process.env.PORT}/tags/add`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: tag,
+                    color: "ffffff",
+                }),
+            }).then(text => text.json())
+            .then(json => console.log(json))
         })
 
         res.json({

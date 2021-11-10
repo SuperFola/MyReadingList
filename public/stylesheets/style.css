@@ -85,6 +85,7 @@ a {
 
 .tags_list {
   margin-bottom: 1em;
+  position: relative;
 }
 
 .tag {

@@ -5,7 +5,7 @@ const codes = require("../httpcodes")
 const router = express.Router()
 
 function isValidColor(color) {
-    return color.length === 6 && /^[0-9A-F]{6}$/i.test('color')
+    return color.length === 6 && /^[0-9A-F]{6}$/i.test(color)
 }
 
 router.get('/', async (req, res) => {
@@ -15,6 +15,12 @@ router.get('/', async (req, res) => {
         title: process.env.TITLE,
         tags: await db.select('tags', _ => true),
     })
+})
+
+router.get('/:id', async (req, res) => {
+    const db = req.app.get("db")
+    const data = await db.select('tags', v => v.name === req.params.id)
+    res.json(data[0])
 })
 
 router.get('/list', async (req, res) => {
@@ -57,7 +63,7 @@ router.delete('/:id', async (req, res) => {
     const db = req.app.get("db")
 
     try {
-        await db.delete("tags", val => val.id === id)
+        await db.delete("tags", val => val.name === id)
         res.json({
             status: "OK",
             deleted: id,

@@ -17,8 +17,6 @@ async function before_submit_article() {
     const url = document.getElementById("url").value
     const notes = document.getElementById("notes").value
 
-    console.log(tags, title, url, notes)
-
     const req = await fetch("/articles/add", {
         method: "POST",
         headers: {
@@ -67,7 +65,7 @@ function add_article() {
                     <label for="url">URL</label>
                 </td>
                 <td>
-                    <input type="text" placeholder="https://example.com" id="url" name="url" required><br>
+                    <input type="text" placeholder="https://example.com" id="url" name="url" required>
                 </td>
             </tr>
             <tr>
@@ -75,7 +73,7 @@ function add_article() {
                     <label for="tags">Tags</label>
                 </td>
                 <td>
-                    <div class="tags-input"></div><br>
+                    <div class="tags-input"></div>
                 </td>
             </tr>
             <tr>
@@ -106,7 +104,10 @@ function add_article() {
 
 function close_add_article() {
     window.adding_article = false
-    document.getElementById('add_article').remove()
+    const el = document.getElementById('add_article')
+    if (el) {
+        el.remove()
+    }
 }
 
 async function article_change_state(currentState, articleID) {
@@ -141,8 +142,89 @@ async function article_change_state(currentState, articleID) {
     }
 }
 
+async function before_submit_tag() {
+    const name = document.getElementById("name").value
+    const color = document.getElementById("color").value.slice(1)
+
+    let old = ""
+    if (Object.prototype.hasOwnProperty.call(window, "edit_tag")) {
+        old = window.edit_tag
+    }
+
+    if (old !== "") {
+        await fetch(`/tags/${old}`, {
+            method: "DELETE",
+        })
+    }
+
+    const req = await fetch("/tags/add", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            name: name,
+            color: color,
+        }),
+    })
+    const res = await req.json()
+
+    if (res) {
+        close_add_tag()
+    }
+}
+
 function add_tag() {
-    console.log("add tag")
+    if (!Object.prototype.hasOwnProperty.call(window, "adding_tag") || window.adding_tag !== true) {
+        window.adding_tag = true
+    } else {
+        return
+    }
+
+    let new_node = document.createElement("div")
+    new_node.setAttribute("id", "adding_tag")
+    new_node.classList.add("article")
+    new_node.innerHTML = `<form>
+        <table>
+            <tr>
+                <td></td>
+                <td style="float: right" onclick="close_add_tag()">&times;</td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="name">Tag name</label>
+                </td>
+                <td>
+                    <input type="text" placeholder="tag name" id="name" name="name" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="color">Color</label>
+                </td>
+                <td>
+                    <input type="color" id="color" name="color" required>
+                </td>
+            </tr>
+        </table>
+
+        <input onclick="before_submit_tag()" type="button" value="Send">
+    </form>`
+
+    let container = document.getElementsByClassName("container")[0]
+    if (container.children.length > 1) {
+        container.insertBefore(new_node, container.children[1])
+    } else {
+        container.appendChild(new_node)
+    }
+}
+
+function close_add_tag() {
+    window.adding_tag = false
+    const el = document.getElementById('adding_tag')
+    if (el) {
+        el.remove()
+    }
 }
 
 async function edit_note(articleID) {
@@ -166,4 +248,14 @@ async function edit_note(articleID) {
             }),
         })
     }
+}
+
+async function edit_tag(tagID) {
+    close_add_tag()
+    add_tag()
+    window.edit_tag = tagID
+    document.getElementById("name").value = tagID
+    const req = await fetch(`/tags/${tagID}`)
+    const res = await req.json()
+    document.getElementById("color").value = "#" + res.color
 }

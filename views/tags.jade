@@ -5,6 +5,7 @@ block content
   - for (const data of tags)
     div.tags_list
       span(style='background-color: #' + data.color).tag: a(href='/articles/tagged/' + data.name)= data.name
+      span.edit_note(onclick="edit_tag('" + data.name + "')") 📝
 
   if tags.length === 0
     p No tag
