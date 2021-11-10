@@ -51,3 +51,10 @@ PATCH JSON to `/articles/update/:id`:
 - *read* (bool)
 - *url* (string)
 - *notes* (string)
+
+Note: unknown attributes are simply deleted
+
+Example:
+```powershell
+(curl http://localhost:3000/articles/update/0 -Method PATCH -H @{"Content-Type"="application/json"} -Body '{"not_an_attribute": "hello", "read": true}').Content
+```
