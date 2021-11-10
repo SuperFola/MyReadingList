@@ -21,6 +21,15 @@ Example:
 (curl "http://localhost:3000/articles/add" -Method POST -H @{"Content-Type"="application/json"} -Body '{"title": "hello", "url": "https://google.com", "tags": []}').Content
 ```
 
+#### Get an article details
+
+GET JSON from `/articles/:id`:
+- **id** (integer)
+
+```powershell
+(curl "http://localhost:3000/articles/0" -Method GET).Content
+```
+
 #### List all
 
 GET JSON from `/articles/list`:
@@ -70,6 +79,15 @@ POST JSON to `/tags/add`:
 Example:
 ```powershell
 (curl "http://localhost:3000/tags/add" -Method POST -H @{"Content-Type"="application/json"} -Body '{"name": "foo", "color": "012345"}').Content
+```
+
+#### Get a tag details
+
+GET JSON from `/tags/:id`:
+- **id** (string)
+
+```powershell
+(curl "http://localhost:3000/tags/0" -Method GET).Content
 ```
 
 #### List all
