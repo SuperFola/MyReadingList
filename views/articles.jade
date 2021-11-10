@@ -17,8 +17,7 @@ block content
         div
           - for (const tag of data.tags)
             - let selected_tag = tags.filter(r => r.name === tag)[0]
-            - let color = Number(selected_tag.color).toString(16).padStart(6, "0")
-            span(style='background-color: #' + color)= tag
+            span(style='background-color: #' + selected_tag.color)= tag
           if data.notes.trim().length > 0
             h3 Notes
             p #{data.notes}

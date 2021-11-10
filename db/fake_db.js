@@ -2,11 +2,11 @@ module.exports = {
     tags: [
         {
             name: "bar",
-            color: 0xff00ff,
+            color: "ff00ff",
         },
         {
             name: "coffee",
-            color: 0x00ff00,
+            color: "00ff00",
         },
     ],
     articles: [
