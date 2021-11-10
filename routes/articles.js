@@ -113,9 +113,9 @@ router.patch('/update/:id', async (req, res) => {
                 async val => {
                     const to_update = Object.fromEntries(
                         Array.from(Object.keys(req.body))
-                            .filter(k => val.hasOwnProperty(k) && !(k in FrozenArticlesAttributes))
+                            .filter(k => Object.prototype.hasOwnProperty.call(val, k) && !(k in FrozenArticlesAttributes))
                             .map(k => [k, req.body[k]]))
-                    if (to_update.hasOwnProperty("url")) {
+                    if (Object.prototype.hasOwnProperty.call(to_update, "url")) {
                         to_update.length = await calculateLength(to_update.url)
                     }
 

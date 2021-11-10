@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "nodemon bin/www",
     "test": "mocha",
-    "lint": "eslint index.js bin/www routes/**"
+    "lint": "eslint *.js bin/www routes/**"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/SuperFola/MyReadingList#readme",
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.2",

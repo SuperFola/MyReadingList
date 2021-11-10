@@ -5,15 +5,15 @@ router.get('/', (_, res) => {
     res.render('tags', { title: 'Express' })
 })
 
-router.post('/add', (req, res) => {
+router.post('/add', _ => {
 
 })
 
-router.post('/remove/:id', (req, res) => {
+router.post('/remove/:id', _ => {
 
 })
 
-router.post('/update/:id', (req, res) => {
+router.post('/update/:id', _ => {
 
 })
 

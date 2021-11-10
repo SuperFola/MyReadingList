@@ -6,7 +6,7 @@ class Database {
     }
 
     async select(table, req) {
-        let data = this.db.hasOwnProperty(table) ? this.db[table] : []
+        let data = Object.prototype.hasOwnProperty.call(this.db, table) ? this.db[table] : []
         return data.filter(req)
     }
 
@@ -15,7 +15,7 @@ class Database {
     }
 
     async insert(table, ...data) {
-        if (this.db.hasOwnProperty(table)) {
+        if (Object.prototype.hasOwnProperty.call(this.db, table)) {
             return data.map(val => {
                 this.db[table].push({
                     id: this.auto_increment,
@@ -31,7 +31,7 @@ class Database {
     }
 
     async update(table, filter, req) {
-        if (this.db.hasOwnProperty(table)) {
+        if (Object.prototype.hasOwnProperty.call(this.db, table)) {
             this.db[table].filter((value, idx) => {
                 if (filter(value)) {
                     this.db[table][idx] = req(value)
@@ -43,7 +43,7 @@ class Database {
     }
 
     async delete(table, req) {
-        if (this.db.hasOwnProperty(table)) {
+        if (Object.prototype.hasOwnProperty.call(this.db, table)) {
             this.db[table] = this.db[table].filter((value) => !req(value))
         } else {
             throw new Error(`<db> Unknown table ${table} when trying to delete rows (columns: ${Object.keys(this.db).join(', ')})`)
