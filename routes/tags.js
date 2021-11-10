@@ -1,3 +1,5 @@
+require("dotenv").config()
+
 const express = require('express')
 const codes = require("../httpcodes")
 const router = express.Router()
@@ -10,7 +12,7 @@ router.get('/', async (req, res) => {
     const db = req.app.get("db")
 
     res.render('tags', {
-        title: 'Express',
+        title: process.env.TITLE,
         tags: await db.select('tags', _ => true),
     })
 })

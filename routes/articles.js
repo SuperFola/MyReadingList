@@ -1,3 +1,5 @@
+require("dotenv").config()
+
 const express = require('express')
 const fetch = require("node-fetch")
 const codes = require("../httpcodes")
@@ -27,7 +29,7 @@ router.get('/', async (req, res) => {
     const total = await db.count('articles', _ => true)
 
     res.render('articles', {
-        title: 'Express',
+        title: process.env.TITLE,
         articles: await db.select('articles', pagger(currentPage, MaxPerPage)),
         tags: await db.select('tags', _ => true),
         currentPage: currentPage,
