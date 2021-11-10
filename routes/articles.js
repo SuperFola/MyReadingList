@@ -90,24 +90,31 @@ router.post('/add', async (req, res) => {
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
         const db = req.app.get("db")
 
-        const ids = await db.insert("articles", {
-            title: req.body.title,
-            tags: req.body.tags ?? [],
-            url: req.body.url,
-            added_on: new Date(),
-            read: req.body.read ?? false,
-            notes: req.body.notes ?? "",
-            length: await calculateLength(req.body.url),
-        })
+        try {
+            const ids = await db.insert("articles", {
+                title: req.body.title,
+                tags: req.body.tags ?? [],
+                url: req.body.url,
+                added_on: new Date(),
+                read: req.body.read ?? false,
+                notes: req.body.notes ?? "",
+                length: await calculateLength(req.body.url),
+            })
 
-        if ("tags" in req.body) {
-            registerTags(req.body.tags)
+            if ("tags" in req.body) {
+                registerTags(req.body.tags)
+            }
+
+            res.json({
+                status: "ok",
+                updated: ids,
+            })
+        } catch (e) {
+            res.status(codes.errors.internal).json({
+                status: "Error",
+                message: e.message,
+            })
         }
-
-        res.json({
-            status: "ok",
-            updated: ids,
-        })
     } else {
         res.status(codes.errors.precondition_failed).json({
             status: "Error",

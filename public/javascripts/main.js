@@ -35,9 +35,11 @@ async function before_submit_article() {
     })
     const res = await req.json()
 
-    if (res) {
+    if (req.status === 200) {
         close_add_article()
         window.location.reload(true)
+    } else {
+        alert(`An error occured: ${res.message}`)
     }
 }
 
@@ -129,7 +131,7 @@ async function article_change_state(currentState, articleID) {
     })
     const res = await req.json()
 
-    if (res) {
+    if (req.status === 200) {
         let div = document.getElementById(`article-${articleID}`)
         let read = div.children[1].children[1]
 
@@ -146,6 +148,8 @@ async function article_change_state(currentState, articleID) {
                 article_change_state(true, articleID)
             }
         }
+    } else {
+        alert(`An error occured: ${res.message}`)
     }
 }
 
@@ -155,9 +159,11 @@ async function delete_article(articleID) {
             method: "DELETE",
         })
         const res = req.json()
-        if (res) {
+        if (req.status == 200) {
             alert("Success")
             window.location.reload(true)
+        } else {
+            alert(`An error occured: ${res.message}`)
         }
     }
 }
@@ -168,9 +174,11 @@ async function delete_tag(tagID) {
             method: "DELETE",
         })
         const res = req.json()
-        if (res) {
+        if (req.status === 200) {
             alert("Success")
             window.location.reload(true)
+        } else {
+            alert(`An error occured: ${res.message}`)
         }
     }
 }
@@ -202,9 +210,11 @@ async function before_submit_tag() {
     })
     const res = await req.json()
 
-    if (res) {
+    if (req.status === 200) {
         close_add_tag()
         window.location.reload(true)
+    } else {
+        alert(`An error occured: ${res.message}`)
     }
 }
 
