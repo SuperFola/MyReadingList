@@ -10,7 +10,7 @@ const app = express()
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'jade')
 
-app.set('db', require('./db_adapter'))
+app.set('db', require('./db/db_adapter'))
 
 app.use(logger('dev'))
 app.use(express.json())
