@@ -3,8 +3,18 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}, a website to help you handling your reading list
-  ul
-    li
-      a(href='/articles') Articles
-    li
-      a(href='/tags') Tags
+
+  h2 Statistics
+  table
+    tr
+      td: b Articles to read
+      td #{to_read} (#{to_read_time} min)
+    tr
+      td: b Articles read
+      td #{read} (#{read_time} min)
+    tr
+      td: b Number of tags
+      td #{tag_count}
+    tr
+      td: b Number of articles
+      td= to_read + read
