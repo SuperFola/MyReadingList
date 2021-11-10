@@ -5,16 +5,16 @@ class Database {
         this.auto_increment = Object.values(this.db).map(v => v.length).reduce((a, b) => a + b)
     }
 
-    select(table, req) {
+    async select(table, req) {
         let data = this.db.hasOwnProperty(table) ? this.db[table] : []
         return data.filter(req)
     }
 
-    count(table, req) {
-        return this.select(table, req).length
+    async count(table, req) {
+        return (await this.select(table, req)).length
     }
 
-    insert(table, ...data) {
+    async insert(table, ...data) {
         if (this.db.hasOwnProperty(table)) {
             return data.map(val => {
                 this.db[table].push({
@@ -30,7 +30,7 @@ class Database {
         }
     }
 
-    update(table, filter, req) {
+    async update(table, filter, req) {
         if (this.db.hasOwnProperty(table)) {
             this.db[table].filter((value, idx) => {
                 if (filter(value)) {
@@ -42,7 +42,7 @@ class Database {
         }
     }
 
-    delete(table, req) {
+    async delete(table, req) {
         if (this.db.hasOwnProperty(table)) {
             this.db[table] = this.db[table].filter((value) => !req(value))
         } else {

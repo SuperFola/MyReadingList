@@ -9,7 +9,7 @@ Parameters written in **bold text** are required.
 Parameters written in *italic text* are optional.
 ### Articles
 
-#### Add
+#### Add an article
 
 POST JSON to `/articles/add`:
 - **title** (string)
@@ -32,7 +32,7 @@ Example:
 (curl "http://localhost:3000/articles/list?page=1&quantity=14" -Method GET).Content
 ```
 
-#### Remove
+#### Remove article
 
 GET JSON from `/articles/remove/:id`:
 - **id** (integer)
@@ -41,3 +41,13 @@ Example:
 ```powershell
 (curl "http://localhost:3000/articles/remove/0" -Method GET).Content
 ```
+
+#### Update article
+
+PATCH JSON to `/articles/update/:id`:
+- **id** (integer)
+- *title* (string)
+- *tags* (list of strings)
+- *read* (bool)
+- *url* (string)
+- *notes* (string)

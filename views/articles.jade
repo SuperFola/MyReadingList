@@ -4,7 +4,6 @@ block content
   h1 Articles
   div
     - for (const data of articles)
-      - console.log(data)
       div
           h2
             a(href= data.url)= data.title
