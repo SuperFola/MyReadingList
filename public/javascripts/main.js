@@ -9,38 +9,89 @@ function focus_ce(node) {
     node.focus()
 }
 
-async function add_article() {
-    if (!Object.prototype.hasOwnProperty.call(window, "adding_article")) {
+async function before_submit_article() {
+    let input = new TagsInput('.tags-input')
+
+    const tags = Array.from(Object.values(input.tags)).map(el => el.innerText)
+    const title = document.getElementById("title").value
+    const url = document.getElementById("url").value
+    const notes = document.getElementById("notes").value
+
+    console.log(tags, title, url, notes)
+
+    const req = await fetch("/articles/add", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            tags: tags,
+            title: title,
+            url: url,
+            notes: notes,
+        }),
+    })
+    const res = await req.json()
+
+    if (res) {
+        close_add_article()
+    }
+}
+
+function add_article() {
+    if (!Object.prototype.hasOwnProperty.call(window, "adding_article") || window.adding_article !== true) {
         window.adding_article = true
     } else {
         return
     }
 
-    const req = await fetch("/tags/list")
-    let tags = await req.json()
-    tags = tags.map(val => {
-        return `<option value="${val.name}" style="background-color: #${val.color}">${val.name}</option>`
-    })
-
     let new_node = document.createElement("div")
     new_node.setAttribute("id", "add_article")
     new_node.classList.add("article")
-    new_node.innerHTML = `<form action="/articles/add" method="POST">
-        <label for="title">Article title</label><br>
-        <input type="text" placeholder="Title" id="title" name="title" required><br>
+    new_node.innerHTML = `<form>
+        <table>
+            <tr>
+                <td></td>
+                <td style="float: right" onclick="close_add_article()">&times;</td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="title">Article title</label>
+                </td>
+                <td>
+                    <input type="text" placeholder="Title" id="title" name="title" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="url">URL</label>
+                </td>
+                <td>
+                    <input type="text" placeholder="https://example.com" id="url" name="url" required><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="tags">Tags</label>
+                </td>
+                <td>
+                    <div class="tags-input"></div><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="notes">Notes</label>
+                </td>
+                <td>
+                    <textarea rows="5" placeholder="Notes" id="notes" name="notes"></textarea>
+                </td>
+            </tr>
+        </table>
 
-        <label for="url">URL</label><br>
-        <input type="text" placeholder="https://example.com" id="url" name="url" required><br>
+        <select hidden multiple="multiple" id="add_article_select_tags" name="tags">
+        </select>
 
-        <label for="tags">Tags</label><br>
-        <select id="tags" name="tags" multiple="multiple">
-            ${tags}
-        </select><br>
-
-        <label for="notes">Notes</label><br>
-        <textarea cols="40" rows="5" placeholder="Notes" id="notes" name="notes"></textarea><br>
-
-        <input type="submit" value="Send">
+        <input onclick="before_submit_article()" type="button" value="Send">
     </form>`
 
     let container = document.getElementsByClassName("container")[0]
@@ -49,6 +100,13 @@ async function add_article() {
     } else {
         container.appendChild(new_node)
     }
+
+    new TagsInput('.tags-input');
+}
+
+function close_add_article() {
+    window.adding_article = false
+    document.getElementById('add_article').remove()
 }
 
 async function article_change_state(currentState, articleID) {

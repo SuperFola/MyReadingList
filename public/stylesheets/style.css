@@ -116,6 +116,63 @@ a {
   text-align: center;
 }
 
+form table {
+  width: 100%;
+}
+
+form td {
+  padding: 0.3em;
+}
+
+input, textarea, .tags-input {
+  border: 2px solid #dfdfdf;
+  border-radius: 10px;
+  height: 30px;
+  padding: 0 11px;
+  font-size: 14px;
+}
+
+.tags-input {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  color: #888;
+  background: white;
+  width: 80%;
+}
+
+.tags-input span {
+  background: #bbb;
+  margin-right: 7px;
+  color: #fff;
+  padding: 4px 7px;
+  border-radius: 10px;
+}
+
+.tags-input span[data-selected] {
+  background: #71ccd5;
+}
+
+.tags-input::after {
+  content: "";
+  background: #888;
+  width: 1px;
+  height: 19px;
+  margin: -1px 0 0 -1px;
+  display: none;
+  -webkit-animation: blink 0.5s infinite alternate;
+          animation: blink 0.5s infinite alternate;
+}
+
+.tags-input:focus {
+  border-color: #71ccd5;
+  outline: none;
+}
+
+.tags-input:focus[data-cursor]::after {
+  display: block;
+}
+
 button#add {
   position: fixed;
   right: 1em;
