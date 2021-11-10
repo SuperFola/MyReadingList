@@ -1,28 +1,29 @@
 extends layout
 
 block content
-  h1 Articles
+  h1 Articles #{title_suffix}
   - for (const data of articles)
-    div.article
+    div(id="article-" + data.id).article
       h2.title
         a(href= data.url, target="_blank")= data.title
         span= data.url
       div.metadata
         span= data.length
-        if data.read
-            span.read Read
-        else
-          span.not_read Not read
+        span(onclick="article_change_state(" + data.read + ", " + data.id + ")")
+          if data.read
+              span.read Read
+          else
+            span.not_read Not read
         span Added on #{data.added_on.toLocaleDateString()}
       div.tags
         - for (const tag of data.tags)
           - let color = (tags.filter(r => r.name === tag).map(t => t.color)[0] ?? "ffffff")
-          span(style='background-color: #' + color).tag= tag
-      if data.notes.trim().length > 0
-        div.notes
-          h3 Notes
+          span(style='background-color: #' + color).tag: a(href='/articles/tagged/' + tag)= tag
+      div.notes
+        h3 Notes
+        if data.notes.trim().length > 0
           p #{data.notes}
-      hr
+        span.edit_note(onclick="edit_note(" + data.id + ")") 📝
 
   if articles.length === 0
     p No articles

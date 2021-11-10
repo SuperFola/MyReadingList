@@ -5,9 +5,9 @@ const fetch = require("node-fetch")
 const codes = require("../httpcodes")
 const router = express.Router()
 
-function pagger(page, length) {
+function pagger(page, length, condition = _ => true) {
     page -= 1
-    return (_, idx) => ((page * length) <= idx && idx < (page + 1) * length)
+    return (val, idx) => ((page * length) <= idx && idx < (page + 1) * length) && condition(val)
 }
 
 const MaxPerPage = 25
@@ -30,7 +30,24 @@ router.get('/', async (req, res) => {
 
     res.render('articles', {
         title: process.env.TITLE,
+        title_suffix: "",
         articles: await db.select('articles', pagger(currentPage, MaxPerPage)),
+        tags: await db.select('tags', _ => true),
+        currentPage: currentPage,
+        totalPages: Math.ceil(total / MaxPerPage),
+    })
+})
+
+router.get('/tagged/:tag', async (req, res) => {
+    const tag = req.params.tag
+    const currentPage = parseInt(req.query.page ?? "1")
+    const db = req.app.get("db")
+    const total = await db.count('articles', (v) => v.tags.includes(tag))
+
+    res.render('articles', {
+        title: process.env.TITLE,
+        title_suffix: `tagged '${tag}'`,
+        articles: await db.select('articles', pagger(currentPage, MaxPerPage, (v) => v.tags.includes(tag))),
         tags: await db.select('tags', _ => true),
         currentPage: currentPage,
         totalPages: Math.ceil(total / MaxPerPage),
@@ -132,6 +149,7 @@ router.patch('/:id', async (req, res) => {
             res.status(codes.errors.not_found).json({
                 status: "Error",
                 message: `Couldn't find article with id ${id}`,
+                more: e.message,
             })
         }
     }

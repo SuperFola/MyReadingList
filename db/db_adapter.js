@@ -32,11 +32,12 @@ class Database {
 
     async update(table, filter, req) {
         if (Object.prototype.hasOwnProperty.call(this.db, table)) {
-            this.db[table].filter((value, idx) => {
-                if (filter(value)) {
-                    this.db[table][idx] = req(value)
+            for (let idx = 0; idx < this.db[table].length; ++idx) {
+                const value = this.db[table][idx]
+                if (await filter(value)) {
+                    this.db[table][idx] = await req(value)
                 }
-            })
+            }
         } else {
             throw new Error(`<db> Unknown table ${table} when trying to update db (columns: ${Object.keys(this.db).join(', ')})`)
         }

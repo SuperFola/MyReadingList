@@ -2,10 +2,12 @@ extends layout
 
 block content
   h1 Tags
-  div
-    - for (const data of tags)
-      div
-        span(style='background-color: #' + data.color)= data.name
-    if tags.length === 0
-      p No tag
+  - for (const data of tags)
+    div.tags_list
+      span(style='background-color: #' + data.color).tag: a(href='/articles/tagged/' + data.name)= data.name
+
+  if tags.length === 0
+    p No tag
+
+  button#add(onclick="add_tag()"): +
 

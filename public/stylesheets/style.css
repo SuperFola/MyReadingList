@@ -8,9 +8,37 @@ body {
   min-height: 100%;
 }
 
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navbar li {
+  float: left;
+}
+
+.navbar li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.navbar .active {
+  background-color: #04AA6D;
+}
+
 .container {
   position: relative;
-  padding: 25px;
+  padding: 0 25px 0 25px;
   height: auto;
   min-height: 100%;
 }
@@ -21,16 +49,22 @@ a {
 
 .article {
   background-color: rgb(250, 248, 245);
+  margin-bottom: 1em;
+  padding: 0.5em;
 }
 
 .title {
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .title > span {
   font-size: small;
   color: #aaa;
   margin-left: 1em;
+}
+
+.metadata {
+  margin-bottom: 0.5em;
 }
 
 .metadata > span {
@@ -49,10 +83,29 @@ a {
   float: right;
 }
 
+.tags_list {
+  margin-bottom: 1em;
+}
+
 .tag {
   border-radius: 10%;
   padding: 0.2em;
   margin: 5px;
+}
+
+.tag > a {
+  text-decoration: none;
+  color: black;
+}
+
+.notes {
+  position: relative;
+}
+
+.edit_note {
+  position: absolute;
+  right: 0.5em;
+  bottom: 0;
 }
 
 .navigation {
@@ -76,7 +129,7 @@ button#add {
 footer {
   position: absolute;
   left: 0;
-  bottom: -1em;
+  bottom: -5em;
   width: 100%;
   text-align: center;
   background-color: antiquewhite;
