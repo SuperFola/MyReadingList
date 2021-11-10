@@ -1,0 +1,20 @@
+module.exports = {
+    ok: 200,
+    created: 201,
+    accepted: 202,
+    no_content: 204,
+    errors: {
+        bad_request: 400,
+        unauthorized: 401,
+        forbidden: 403,
+        not_found: 404,
+        method_not_allowed: 405,
+        not_acceptable: 406,
+        time_out: 408,
+        conflict: 409,
+        gone: 410,
+        precondition_failed: 412,
+        internal: 500,
+        not_implemented: 501,
+    },
+}

@@ -1,5 +1,6 @@
 const express = require('express')
 const fetch = require("node-fetch")
+const codes = require("../httpcodes")
 const router = express.Router()
 
 function pagger(page, length) {
@@ -36,7 +37,7 @@ router.get('/list', (req, res) => {
     const quantity = parseInt(req.query.quantity ?? MaxPerPage)
     const db = req.app.get("db")
 
-    res.send(db.select('articles', pagger(currentPage, quantity)))
+    res.json(db.select('articles', pagger(currentPage, quantity)))
 })
 
 router.post('/add', async (req, res) => {
@@ -45,7 +46,7 @@ router.post('/add', async (req, res) => {
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
         const db = req.app.get("db")
 
-        db.insert("articles", {
+        const ids = db.insert("articles", {
             title: req.body.title,
             tags: req.body.tags,
             url: req.body.url,
@@ -57,17 +58,39 @@ router.post('/add', async (req, res) => {
 
         res.json({
             status: "ok",
+            updated: ids,
         })
     } else {
-        res.json({
+        res.status(codes.errors.precondition_failed).json({
             status: "Error",
             message: `Missing parameter(s): ${NeededParams.filter(p => !(p in req.body))}`,
         })
     }
 })
 
-router.post('/remove/:id', (req, res) => {
+router.get('/remove/:id', (req, res) => {
+    const id = parseInt(req.params.id)
+    const db = req.app.get("db")
 
+    if (isNaN(id)) {
+        res.status(codes.errors.precondition_failed).json({
+            status: "Error",
+            message: `Couldn't parse article id ${req.params.id}`,
+        })
+    } else {
+        try {
+            db.delete("articles", val => val.id === id)
+            res.json({
+                status: "OK",
+                deleted: id,
+            })
+        } catch (e) {
+            res.status(codes.errors.not_found).json({
+                status: "Error",
+                message: `Couldn't find article with id ${id}`,
+            })
+        }
+    }
 })
 
 router.post('/update/:id', (req, res) => {

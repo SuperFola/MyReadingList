@@ -31,3 +31,13 @@ Example:
 ```powershell
 (curl "http://localhost:3000/articles/list?page=1&quantity=14" -Method GET).Content
 ```
+
+#### Remove
+
+GET JSON from `/articles/remove/:id`:
+- **id** (integer)
+
+Example:
+```powershell
+(curl "http://localhost:3000/articles/remove/0" -Method GET).Content
+```

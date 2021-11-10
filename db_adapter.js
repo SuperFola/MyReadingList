@@ -16,16 +16,17 @@ class Database {
 
     insert(table, ...data) {
         if (this.db.hasOwnProperty(table)) {
-            data.forEach(val => {
+            return data.map(val => {
                 this.db[table].push({
                     id: this.auto_increment,
                     ...val
                 })
                 this.auto_increment += 1
+                return this.auto_increment - 1
             })
-            console.log(this.db)
         } else {
             this.db[table] = data
+            return []
         }
     }
 
