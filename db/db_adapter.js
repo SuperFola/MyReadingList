@@ -4,6 +4,9 @@ class Database {
     constructor(file, with_autoinc = true) {
         this.path = `${__dirname}/schema/${file}.json`
         this.with_autoinc = with_autoinc
+        if (!fs.existsSync(this.path) && file === "users") {
+            fs.writeFileSync(this.path, '{"users": []}')
+        }
         this.db = require(this.path)
         this.auto_increment = Object.values(this.db).map(v => v.length).reduce((a, b) => a + b)
     }
