@@ -1,5 +1,5 @@
 # Database
-db/schema/users/*.json
+db/schema/
 !db/schema/users/_base.json
 
 # Logs
