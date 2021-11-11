@@ -5,6 +5,7 @@ const express = require('express')
 const fetch = require("node-fetch")
 const codes = require("../httpcodes")
 const auth = require('../db/auth')
+const { addTag } = require("./tags")
 const router = express.Router()
 
 function pagger(page, length, condition = _ => true) {
@@ -25,21 +26,6 @@ async function calculateLength(url) {
     const words = purifiedPageBody.trim().split(/\s+/).length
     const time = Math.ceil(words / wpm)
     return `${time} min`
-}
-
-async function registerTags(tags) {
-    tags.forEach(tag => {
-        fetch(`http://localhost:${process.env.PORT}/tags/add`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: tag,
-                color: "ffffff",
-            }),
-        })
-    })
 }
 
 router.get('/', auth.isAuthorized, async (req, res) => {
@@ -105,10 +91,12 @@ router.post('/add', auth.isAuthorized, async (req, res) => {
                 read: req.body.read ?? false,
                 notes: req.body.notes ?? "",
                 length: await calculateLength(req.body.url),
-            }, false)
+            })
 
             if ("tags" in req.body) {
-                registerTags(req.body.tags)
+                req.body.tags.forEach(tag => {
+                    addTag(db, req.session.user, tag, "ffffff")
+                })
             }
 
             res.json({
@@ -183,7 +171,9 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
             )
 
             if ("tags" in req.body) {
-                registerTags(req.body.tags)
+                req.body.tags.forEach(tag => {
+                    addTag(db, req.session.user, tag, "ffffff")
+                })
             }
 
             res.json({
@@ -200,4 +190,4 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
     }
 })
 
-module.exports = router
+module.exports.router = router

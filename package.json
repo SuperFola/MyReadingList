@@ -8,6 +8,9 @@
     "test": "mocha",
     "lint": "eslint *.js bin/www routes/**"
   },
+  "nodemonConfig": {
+    "ignore": ["test/*", "views/*", "db/schema/*"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SuperFola/MyReadingList.git"

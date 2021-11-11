@@ -29,9 +29,9 @@ app.use(session({
     saveUninitialized: false,
 }))
 
-app.use('/', require('./routes/index'))
-app.use('/articles', require('./routes/articles'))
-app.use('/tags', require('./routes/tags'))
+app.use('/', require('./routes/index').router)
+app.use('/articles', require('./routes/articles').router)
+app.use('/tags', require('./routes/tags').router)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

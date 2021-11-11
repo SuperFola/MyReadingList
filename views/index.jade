@@ -12,6 +12,8 @@ block content
       tr
         td: label(for="password") Password
         td: input(type="password", name="password", id="password")
-      tr
-        td: input(onclick="login()", type="button", value="Send")
-        td
+      tr(style="text-align: center")
+        td(colspan=2)
+          input(onclick="login_or_signup('login')", type="button", value="Log in")
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          input(onclick="login_or_signup('signup')", type="button", value="Sign up")

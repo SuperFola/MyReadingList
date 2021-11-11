@@ -9,6 +9,25 @@ function isValidColor(color) {
     return color.length === 6 && /^[0-9A-F]{6}$/i.test(color)
 }
 
+async function addTag(db, user, name, color) {
+    if (isValidColor(color)) {
+        const existing = await db(`users/${user}`).select("tags", t => t.name === name)
+
+        if (existing.length === 0) {
+            const ids = await db(`users/${user}`).insert("tags", {
+                name: name,
+                color: color,
+            })
+
+            return ids
+        } else {
+            throw new Error(`The tag ${name} already exists. Delete it before trying to add it again`)
+        }
+    } else {
+        throw new Error(`Invalid color format: ${color}`)
+    }
+}
+
 router.get('/', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
 
@@ -36,29 +55,16 @@ router.post('/add', auth.isAuthorized, async (req, res) => {
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
         const db = req.app.get("db")
 
-        if (isValidColor(req.body.color)) {
-            const existing = await db(`users/${req.session.user}`).select("tags", t => t.name === req.body.name)
-
-            if (existing.length === 0) {
-                const ids = await db(`users/${req.session.user}`).insert("tags", {
-                    name: req.body.name,
-                    color: req.body.color,
-                })
-
-                res.json({
-                    status: "ok",
-                    updated: ids,
-                })
-            } else {
-                res.status(codes.errors.conflict).json({
-                    status: "Error",
-                    message: `The tag ${req.body.name} already exists. Delete it before trying to add it again`,
-                })
-            }
-        } else {
+        try {
+            const ids = await addTag(db, req.session.user, req.body.name, req.body.color)
+            res.json({
+                status: "ok",
+                updated: ids,
+            })
+        } catch (e) {
             res.status(codes.errors.precondition_failed).json({
                 status: "Error",
-                message: `Invalid color format: ${req.body.color}`,
+                message: e.message,
             })
         }
     } else {
@@ -134,4 +140,5 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
     }
 })
 
-module.exports = router
+module.exports.router = router
+module.exports.addTag = addTag

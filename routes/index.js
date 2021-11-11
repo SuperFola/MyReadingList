@@ -1,6 +1,7 @@
 require("dotenv").config()
 
 const express = require('express')
+const fs = require('fs')
 const auth = require('../db/auth')
 const codes = require('../httpcodes')
 const router = express.Router()
@@ -40,6 +41,41 @@ router.get('/home', auth.isAuthorized, async (req, res) => {
         read_time: read_time,
         tag_count: tags,
     })
+})
+
+router.post('/signup', async (req, res) => {
+    const db = req.app.get("db")("users")
+
+    const NeededParams = ["username", "password"]
+    if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
+        const rows = await db.select("users", val => val.name === req.body.username)
+
+        console.log(rows)
+
+        if (rows.length === 0 && req.body.username !== "_base") {
+            await db.insert("users", {
+                name: req.body.username,
+                pass: auth.hasher(req.body.password),
+                tokens: [],
+            })
+
+            fs.writeFileSync(`${__dirname}/../db/schema/users/${req.body.username}.json`, fs.readFileSync(`${__dirname}/../db/schema/users/_base.json`))
+
+            return res.json({
+                status: "ok",
+            })
+        } else {
+            res.status(codes.errors.precondition_failed).json({
+                status: "Error",
+                message: "User already exists",
+            })
+        }
+    } else {
+        res.status(codes.errors.precondition_failed).json({
+            status: "Error",
+            message: `Missing parameter(s): ${NeededParams.filter(p => !(p in req.body))}`,
+        })
+    }
 })
 
 router.post('/login', async (req, res) => {
@@ -94,4 +130,4 @@ router.get('/about', async (req, res) => {
     })
 })
 
-module.exports = router
+module.exports.router = router

@@ -13,11 +13,11 @@ function focus_ce(node) {
     node.focus()
 }
 
-async function login() {
+async function login_or_signup(target) {
     const username = document.getElementById("username").value
     const password = document.getElementById("password").value
 
-    const req = await fetch("/login", {
+    const req = await fetch(`/${target}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -31,7 +31,15 @@ async function login() {
     const res = await req.json()
 
     if (req.status === 200) {
-        window.location.href = "/home"
+        switch (target) {
+            case "signup":
+                login_or_signup("login")
+                break
+
+            case "login":
+                window.location.href = "/home"
+                break
+        }
     } else {
         alert(res.message)
     }
