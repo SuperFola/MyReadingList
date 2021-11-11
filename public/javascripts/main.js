@@ -192,22 +192,32 @@ async function before_submit_tag() {
         old = window.edit_tag
     }
 
+    let req = null
+
     if (old !== "") {
-        await fetch(`/tags/${old}`, {
-            method: "DELETE",
+        req = await fetch(`/tags/${old}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                color: color,
+            }),
+        })
+    } else {
+        req = await fetch("/tags/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                color: color,
+            }),
         })
     }
 
-    const req = await fetch("/tags/add", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            name: name,
-            color: color,
-        }),
-    })
     const res = await req.json()
 
     if (req.status === 200) {

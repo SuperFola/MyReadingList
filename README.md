@@ -61,7 +61,7 @@ PATCH JSON to `/articles/:id`:
 - *url* (string)
 - *notes* (string)
 
-Note: unknown attributes are simply deleted
+Note: unknown attributes are simply ignored
 
 Example:
 ```powershell
@@ -112,10 +112,11 @@ Example:
 #### Update a tag
 
 PATCH JSON to `/tags/:id`:
-- *name* (string), be careful when modifying this as it can break all the articles using said tag
+- **id** (string), the (old) tag name
+- *name* (string), an optional new name (must be unique)
 - *color* (string), must be a valid hexcolor
 
-Note: unknown attributes are simply deleted
+Note: unknown attributes are simply ignored
 
 Example:
 ```powershell

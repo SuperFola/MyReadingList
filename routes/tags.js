@@ -95,18 +95,31 @@ router.patch('/:id', async (req, res) => {
     const db = req.app.get("db")
 
     try {
+        // updating the tag name
+        if ("name" in req.body && id !== req.body.name) {
+            await db.update(
+                "articles",
+                val => val.tags.includes(id),
+                async val => {
+                    return {
+                        ...val,
+                        tags: val.tags.map(t => t === id ? req.body.name : t),
+                    }
+                },
+            )
+        }
+
         await db.update(
             "tags",
-            val => val.id === id,
+            val => val.name === id,
             async val => {
-                const to_update = Object.fromEntries(
-                    Array.from(Object.keys(req.body))
-                        .filter(k => Object.prototype.hasOwnProperty.call(val, k))
-                        .map(k => [k, req.body[k]]))
-
-                return { ...val, ...to_update }
+                return {
+                    name: req.body.name ?? val.name,
+                    color: req.body.color ?? val.color,
+                }
             },
         )
+
         res.json({
             status: "OK",
             updated: id,
