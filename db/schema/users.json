@@ -1,30 +1,5 @@
 {
     "users": [
-        {
-            "name": "folae",
-            "pass": "995aadfdd090091d805dc6c47f552e13be975c6c01640ea645aef781a40e585b",
-            "tokens": [
-                {
-                    "value": "5024d8d0ff696184acac8119029a3c0eaf8ce7a0f20361a1c0e9c1a683cbdc2e",
-                    "expireAt": "16366652130003600"
-                },
-                {
-                    "value": "bb8b08ec0e7eef0a81c74a2a76d4ed11e62192bf0fa0ebf63af582dc98484092",
-                    "expireAt": "16366652680003600"
-                },
-                {
-                    "value": "388f1fc6014de153a03af68b83df65b98b039f61fbc823019aa8e839a02ef1c8",
-                    "expireAt": "16366653100003600"
-                },
-                {
-                    "value": "f91ed6aa59bf8e8c2b284ab855d2f0fc9d7f4cd910b563228c49120ce099484a",
-                    "expireAt": "16366653120003600"
-                },
-                {
-                    "value": "890a273b4e8a35074d40a4d0069d7ac341db9e0a6c3ad6a069729f18e9eb80ae",
-                    "expireAt": "16366654060003600"
-                }
-            ]
-        }
+        {}
     ]
 }
