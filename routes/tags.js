@@ -14,6 +14,7 @@ router.get('/', auth.isAuthorized, async (req, res) => {
 
     res.render('tags', {
         title: process.env.TITLE,
+        userID: req.session.user,
         tags: await db(`users/${req.session.user}`).select('tags', _ => true),
     })
 })

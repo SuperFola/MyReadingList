@@ -49,6 +49,7 @@ router.get('/', auth.isAuthorized, async (req, res) => {
 
     res.render('articles', {
         title: process.env.TITLE,
+        userID: req.session.user,
         title_suffix: "",
         articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage)),
         tags: await db(`users/${req.session.user}`).select('tags', _ => true),
@@ -65,6 +66,7 @@ router.get('/tagged/:tag', auth.isAuthorized, async (req, res) => {
 
     res.render('articles', {
         title: process.env.TITLE,
+        userID: req.session.user,
         title_suffix: `tagged '${tag}'`,
         articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage, (v) => v.tags.includes(tag))),
         tags: await db(`users/${req.session.user}`).select('tags', _ => true),

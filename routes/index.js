@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
     } else {
         res.render('index', {
             title: process.env.TITLE,
+            userID: req.session.user,
         })
     }
 })
@@ -32,6 +33,7 @@ router.get('/home', auth.isAuthorized, async (req, res) => {
 
     res.render('home', {
         title: process.env.TITLE,
+        userID: req.session.user,
         to_read: to_read,
         to_read_time: to_read_time,
         read: articles.length - to_read,
@@ -45,13 +47,15 @@ router.post('/login', async (req, res) => {
 
     const NeededParams = ["username", "password"]
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
-        const rows = db(`users/${req.session.user}`).select(req.body.user)
+        const rows = await db.select("users", val => val.name === req.body.username)
+
         if (rows.length === 1 && rows[0]["pass"] === auth.hasher(req.body.password)) {
-            req.session.user = req.body.user
+            req.session.user = req.body.username
+
+            return res.json({
+                status: "ok",
+            })
         }
-        return res.json({
-            status: "ok",
-        })
     }
 
     return res.status(codes.errors.forbidden).json({
@@ -60,9 +64,15 @@ router.post('/login', async (req, res) => {
     })
 })
 
-router.get('/about', function (_, res) {
+router.get('/disconnect', auth.isAuthorized, async (req, res) => {
+    req.session.user = undefined
+    res.redirect('/')
+})
+
+router.get('/about', async (req, res) => {
     res.render('about', {
         title: process.env.TITLE,
+        userID: req.session.user,
     })
 })
 

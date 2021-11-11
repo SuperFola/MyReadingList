@@ -13,6 +13,30 @@ function focus_ce(node) {
     node.focus()
 }
 
+async function login() {
+    const username = document.getElementById("username").value
+    const password = document.getElementById("password").value
+
+    const req = await fetch("/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        }),
+    })
+
+    const res = await req.json()
+
+    if (req.status === 200) {
+        window.location.href = "/home"
+    } else {
+        alert(res.message)
+    }
+}
+
 async function before_submit_article() {
     let input = new TagsInput('.tags-input')
 

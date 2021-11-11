@@ -4,3 +4,14 @@ block content
   h1= title
   p Welcome to #{title}, a website to help you handling your reading list.
   p You are not logged in.
+  form
+    table
+      tr
+        td: label(for="username") Username
+        td: input(type="text", name="username", id="username")
+      tr
+        td: label(for="password") Password
+        td: input(type="password", name="password", id="password")
+      tr
+        td: input(onclick="login()", type="button", value="Send")
+        td

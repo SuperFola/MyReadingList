@@ -1,11 +1,10 @@
 require("dotenv").config()
 
 const codes = require("../httpcodes")
+const crypto = require("crypto")
 
 module.exports = {
     isAuthorized: (req, _, next) => {
-        console.log(req.session)
-
         if (!("user" in req.session) || req.session.user === null) {
             const err = new Error("Not authorized, please login")
             err.status = codes.errors.forbidden
