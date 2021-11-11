@@ -48,12 +48,14 @@ router.post('/login', async (req, res) => {
     const NeededParams = ["username", "password"]
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
         const rows = await db.select("users", val => val.name === req.body.username)
+        const hash = auth.hasher(req.body.password)
 
-        if (rows.length === 1 && rows[0]["pass"] === auth.hasher(req.body.password)) {
+        if (rows.length === 1 && rows[0]["pass"] === hash) {
             req.session.user = req.body.username
 
             return res.json({
                 status: "ok",
+                token: Buffer.from(`${req.body.username}:${hash}`, "utf-8").toString("base64"),
             })
         }
     }

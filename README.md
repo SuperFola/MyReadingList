@@ -7,7 +7,20 @@ An article reading list manager.
 Parameters written in **bold text** are required.
 
 Parameters written in *italic text* are optional.
+
+### Login in
+
+POST JSON to `/login`:
+- **username** (string)
+- **password** (string)
+
+You will receive a JSON on success, as following: `{"success": "ok", "token": "..."}`
+
+Send the token to every other request in a basic `Authorization` header.
+
 ### Articles
+
+**Note**: all `/articles` routes are protected, they need you to send a valid authorization header.
 
 #### Add an article
 
@@ -18,7 +31,7 @@ POST JSON to `/articles/add`:
 
 Example:
 ```powershell
-(curl "http://localhost:3000/articles/add" -Method POST -H @{"Content-Type"="application/json"} -Body '{"title": "hello", "url": "https://google.com", "tags": []}').Content
+(curl "http://localhost:3000/articles/add" -Method POST -H @{"Content-Type"="application/json"; "Authorization"="Basic token..."} -Body '{"title": "hello", "url": "https://google.com", "tags": []}').Content
 ```
 
 #### Get an article details
@@ -27,7 +40,7 @@ GET JSON from `/articles/:id`:
 - **id** (integer)
 
 ```powershell
-(curl "http://localhost:3000/articles/0" -Method GET).Content
+(curl "http://localhost:3000/articles/0" -Method GET -H @{"Authorization"="Basic token..."}).Content
 ```
 
 #### List all
@@ -38,7 +51,7 @@ GET JSON from `/articles/list`:
 
 Example:
 ```powershell
-(curl "http://localhost:3000/articles/list?page=1&quantity=14" -Method GET).Content
+(curl "http://localhost:3000/articles/list?page=1&quantity=14" -Method GET -H @{"Authorization"="Basic token..."}).Content
 ```
 
 #### Remove article
@@ -48,7 +61,7 @@ DELETE `/articles/:id`:
 
 Example:
 ```powershell
-(curl "http://localhost:3000/articles/0" -Method DELETE).Content
+(curl "http://localhost:3000/articles/0" -Method DELETE -H @{"Authorization"="Basic token..."}).Content
 ```
 
 #### Update article
@@ -65,10 +78,12 @@ Note: unknown attributes are simply ignored
 
 Example:
 ```powershell
-(curl http://localhost:3000/articles/0 -Method PATCH -H @{"Content-Type"="application/json"} -Body '{"not_an_attribute": "hello", "read": true}').Content
+(curl http://localhost:3000/articles/0 -Method PATCH -H @{"Content-Type"="application/json"; "Authorization"="Basic token..."} -Body '{"not_an_attribute": "hello", "read": true}').Content
 ```
 
 ### Tags
+
+**Note**: all `/tags` routes are protected, they need you to send a valid authorization header.
 
 #### Add a tag
 
@@ -78,7 +93,7 @@ POST JSON to `/tags/add`:
 
 Example:
 ```powershell
-(curl "http://localhost:3000/tags/add" -Method POST -H @{"Content-Type"="application/json"} -Body '{"name": "foo", "color": "012345"}').Content
+(curl "http://localhost:3000/tags/add" -Method POST -H @{"Content-Type"="application/json"; "Authorization"="Basic token..."} -Body '{"name": "foo", "color": "012345"}').Content
 ```
 
 #### Get a tag details
@@ -87,7 +102,7 @@ GET JSON from `/tags/:id`:
 - **id** (string)
 
 ```powershell
-(curl "http://localhost:3000/tags/0" -Method GET).Content
+(curl "http://localhost:3000/tags/0" -Method GET -H @{"Authorization"="Basic token..."}).Content
 ```
 
 #### List all
@@ -96,7 +111,7 @@ GET JSON from `/tags/list`.
 
 Example:
 ```powershell
-(curl "http://localhost:3000/tags/list" -Method GET).Content
+(curl "http://localhost:3000/tags/list" -Method GET -H @{"Authorization"="Basic token..."}).Content
 ```
 
 #### Remove a tag
@@ -106,7 +121,7 @@ DELETE `/tags/:id`:
 
 Example:
 ```powershell
-(curl "http://localhost:3000/tags/coffee" -Method DELETE).Content
+(curl "http://localhost:3000/tags/coffee" -Method DELETE -H @{"Authorization"="Basic token..."}).Content
 ```
 
 #### Update a tag
@@ -120,5 +135,5 @@ Note: unknown attributes are simply ignored
 
 Example:
 ```powershell
-(curl http://localhost:3000/tags/coffee -Method PATCH -H @{"Content-Type"="application/json"} -Body '{"not_an_attribute": "hello", "color": "ff0000"}').Content
+(curl http://localhost:3000/tags/coffee -Method PATCH -H @{"Content-Type"="application/json"; "Authorization"="Basic token..."} -Body '{"not_an_attribute": "hello", "color": "ff0000"}').Content
 ```
