@@ -1,5 +1,6 @@
 require("dotenv").config()
 
+const parser = require('node-html-parser')
 const express = require('express')
 const fetch = require("node-fetch")
 const codes = require("../httpcodes")
@@ -16,9 +17,11 @@ const FrozenArticlesAttributes = ["id", "length", "added_on"]
 
 async function calculateLength(url) {
     const page = await fetch(url)
-    const text = await page.text()
+    const pageContent = await page.text()
+    const pageBody = parser.parse(pageContent).getElementsByTagName("body").toString()
+    const purifiedPageBody = pageBody.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi,"")
     const wpm = 225
-    const words = text.trim().split(/\s+/).length
+    const words = purifiedPageBody.trim().split(/\s+/).length
     const time = Math.ceil(words / wpm)
     return `${time} min`
 }
