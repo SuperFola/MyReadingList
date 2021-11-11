@@ -45,13 +45,13 @@ async function registerTags(tags) {
 router.get('/', auth.isAuthorized, async (req, res) => {
     const currentPage = parseInt(req.query.page ?? "1")
     const db = req.app.get("db")
-    const total = await db.count('articles', _ => true)
+    const total = await db(`users/${req.session.user}`).count('articles', _ => true)
 
     res.render('articles', {
         title: process.env.TITLE,
         title_suffix: "",
-        articles: await db.select('articles', pagger(currentPage, MaxPerPage)),
-        tags: await db.select('tags', _ => true),
+        articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage)),
+        tags: await db(`users/${req.session.user}`).select('tags', _ => true),
         currentPage: currentPage,
         totalPages: Math.ceil(total / MaxPerPage),
     })
@@ -61,13 +61,13 @@ router.get('/tagged/:tag', auth.isAuthorized, async (req, res) => {
     const tag = req.params.tag
     const currentPage = parseInt(req.query.page ?? "1")
     const db = req.app.get("db")
-    const total = await db.count('articles', (v) => v.tags.includes(tag))
+    const total = await db(`users/${req.session.user}`).count('articles', (v) => v.tags.includes(tag))
 
     res.render('articles', {
         title: process.env.TITLE,
         title_suffix: `tagged '${tag}'`,
-        articles: await db.select('articles', pagger(currentPage, MaxPerPage, (v) => v.tags.includes(tag))),
-        tags: await db.select('tags', _ => true),
+        articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage, (v) => v.tags.includes(tag))),
+        tags: await db(`users/${req.session.user}`).select('tags', _ => true),
         currentPage: currentPage,
         totalPages: Math.ceil(total / MaxPerPage),
     })
@@ -78,13 +78,13 @@ router.get('/list', auth.isAuthorized, async (req, res) => {
     const quantity = parseInt(req.query.quantity ?? MaxPerPage)
     const db = req.app.get("db")
 
-    res.json(await db.select('articles', pagger(currentPage, quantity)))
+    res.json(await db(`users/${req.session.user}`).select('articles', pagger(currentPage, quantity)))
 })
 
 router.get('/:id', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
     const id = parseInt(req.params.id)
-    const data = await db.select('articles', v => v.id === id)
+    const data = await db(`users/${req.session.user}`).select('articles', v => v.id === id)
     res.json(data[0])
 })
 
@@ -95,7 +95,7 @@ router.post('/add', auth.isAuthorized, async (req, res) => {
         const db = req.app.get("db")
 
         try {
-            const ids = await db.insert("articles", {
+            const ids = await db(`users/${req.session.user}`).insert("articles", {
                 title: req.body.title,
                 tags: req.body.tags ?? [],
                 url: req.body.url,
@@ -138,7 +138,7 @@ router.delete('/:id', auth.isAuthorized, async (req, res) => {
         })
     } else {
         try {
-            await db.delete("articles", val => val.id === id)
+            await db(`users/${req.session.user}`).delete("articles", val => val.id === id)
             res.json({
                 status: "OK",
                 deleted: id,
@@ -163,7 +163,7 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
         })
     } else {
         try {
-            await db.update(
+            await db(`users/${req.session.user}`).update(
                 "articles",
                 val => val.id === id,
                 async val => {

@@ -14,19 +14,19 @@ router.get('/', auth.isAuthorized, async (req, res) => {
 
     res.render('tags', {
         title: process.env.TITLE,
-        tags: await db.select('tags', _ => true),
+        tags: await db(`users/${req.session.user}`).select('tags', _ => true),
     })
 })
 
 router.get('/:id', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
-    const data = await db.select('tags', v => v.name === req.params.id)
+    const data = await db(`users/${req.session.user}`).select('tags', v => v.name === req.params.id)
     res.json(data[0])
 })
 
 router.get('/list', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
-    res.json(await db.select('tags', _ => true))
+    res.json(await db(`users/${req.session.user}`).select('tags', _ => true))
 })
 
 router.post('/add', auth.isAuthorized, async (req, res) => {
@@ -36,10 +36,10 @@ router.post('/add', auth.isAuthorized, async (req, res) => {
         const db = req.app.get("db")
 
         if (isValidColor(req.body.color)) {
-            const existing = await db.select("tags", t => t.name === req.body.name)
+            const existing = await db(`users/${req.session.user}`).select("tags", t => t.name === req.body.name)
 
             if (existing.length === 0) {
-                const ids = await db.insert("tags", {
+                const ids = await db(`users/${req.session.user}`).insert("tags", {
                     name: req.body.name,
                     color: req.body.color,
                 })
@@ -73,8 +73,8 @@ router.delete('/:id', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
 
     try {
-        await db.delete("tags", val => val.name === id)
-        await db.update(
+        await db(`users/${req.session.user}`).delete("tags", val => val.name === id)
+        await db(`users/${req.session.user}`).update(
             "articles",
             val => val.tags.includes(id),
             val => { return { ...val, tags: val.tags.filter(t => t !== id) } },
@@ -98,7 +98,7 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
     try {
         // updating the tag name
         if ("name" in req.body && id !== req.body.name) {
-            await db.update(
+            await db(`users/${req.session.user}`).update(
                 "articles",
                 val => val.tags.includes(id),
                 async val => {
@@ -110,7 +110,7 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
             )
         }
 
-        await db.update(
+        await db(`users/${req.session.user}`).update(
             "tags",
             val => val.name === id,
             async val => {

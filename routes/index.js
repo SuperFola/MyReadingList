@@ -23,8 +23,8 @@ router.get('/', async (req, res) => {
 
 router.get('/home', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
-    const articles = await db.select("articles", _ => true)
-    const tags = await db.count("tags", _ => true)
+    const articles = await db(`users/${req.session.user}`).select("articles", _ => true)
+    const tags = await db(`users/${req.session.user}`).count("tags", _ => true)
 
     const to_read = articles.filter(a => !a.read).length
     const to_read_time = sumTimes(articles.filter(a => !a.to_read))
@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
 
     const NeededParams = ["username", "password"]
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
-        const rows = db.select(req.body.user)
+        const rows = db(`users/${req.session.user}`).select(req.body.user)
         if (rows.length === 1 && rows[0]["pass"] === auth.hasher(req.body.password)) {
             req.session.user = req.body.user
         }

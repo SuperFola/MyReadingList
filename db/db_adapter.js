@@ -76,4 +76,4 @@ class Database {
     }
 }
 
-module.exports = new Database("users/folae")
+module.exports = (file) => new Database(file)
