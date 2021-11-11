@@ -7,18 +7,38 @@
         {
             "name": "coffee",
             "color": "00ff00"
+        },
+        {
+            "id": 4,
+            "name": "12f",
+            "color": "ffffff"
         }
     ],
     "articles": [
         {
             "id": 0,
             "title": "Foo",
-            "tags": ["bar", "coffee"],
+            "tags": [
+                "bar",
+                "coffee"
+            ],
             "read": true,
             "url": "https://google.com",
             "notes": "fake note",
             "length": "4 min",
             "added_on": "2021-11-11T16:14:40.711Z"
+        },
+        {
+            "id": 3,
+            "title": "test",
+            "tags": [
+                "12f"
+            ],
+            "url": "https://12f.pl",
+            "added_on": "2021-11-11T18:50:04.728Z",
+            "read": false,
+            "notes": "12f!!",
+            "length": "2 min"
         }
     ]
 }

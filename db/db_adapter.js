@@ -2,7 +2,7 @@ const fs = require("fs")
 
 class Database {
     constructor(file, with_autoinc = true) {
-        this.path = `./schema/${file}.json`
+        this.path = `${__dirname}/schema/${file}.json`
         this.with_autoinc = with_autoinc
         this.db = require(this.path)
         this.auto_increment = Object.values(this.db).map(v => v.length).reduce((a, b) => a + b)

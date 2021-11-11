@@ -6,7 +6,7 @@ const router = express.Router()
 function sumTimes(array) {
     return array.map(a => a.length.slice(0, a.length.length - " min".length))
         .map(t => parseInt(t))
-        .reduce((a, b) => a + b)
+        .reduce((a, b) => a + b, 0)
 }
 
 router.get('/', async (req, res) => {
