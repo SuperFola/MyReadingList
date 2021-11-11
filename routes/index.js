@@ -53,9 +53,25 @@ router.post('/login', async (req, res) => {
         if (rows.length === 1 && rows[0]["pass"] === hash) {
             req.session.user = req.body.username
 
+            const timestamp = Date.parse(new Date())
+            const token = auth.hasher(timestamp.toString() + hash)
+            await db.update(
+                "users",
+                val => val.name === req.body.username,
+                val => {
+                    return {
+                        ...val,
+                        tokens: (val.tokens ?? []).filter(t => t.expireAt > timestamp).concat({
+                            value: token,
+                            expireAt: timestamp + process.env.MAX_TOKEN_LIFETIME_SEC,
+                        }),
+                    }
+                }
+            )
+
             return res.json({
                 status: "ok",
-                token: Buffer.from(`${req.body.username}:${hash}`, "utf-8").toString("base64"),
+                token: Buffer.from(`${req.body.username}:${token}`, "utf-8").toString("base64"),
             })
         }
     }

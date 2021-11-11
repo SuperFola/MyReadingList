@@ -16,7 +16,7 @@ POST JSON to `/login`:
 
 You will receive a JSON on success, as following: `{"success": "ok", "token": "..."}`
 
-Send the token to every other request in a basic `Authorization` header.
+Send the token to every other request in a basic `Authorization` header. Be careful that tokens expires after a given amount of time (default is 3600 seconds, one hour).
 
 ### Articles
 
