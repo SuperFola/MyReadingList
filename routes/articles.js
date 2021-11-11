@@ -98,7 +98,7 @@ router.post('/add', async (req, res) => {
                 title: req.body.title,
                 tags: req.body.tags ?? [],
                 url: req.body.url,
-                added_on: new Date(),
+                added_on: (new Date()).toJSON(),
                 read: req.body.read ?? false,
                 notes: req.body.notes ?? "",
                 length: await calculateLength(req.body.url),

@@ -15,7 +15,7 @@ block content
               span.pointer.read Read
           else
             span.pointer.not_read Not read
-        span Added on #{data.added_on.toLocaleDateString()}
+        span Added on #{(new Date(Date.parse(data.added_on))).toLocaleDateString()}
       div.tags
         - for (const tag of data.tags)
           - let color = (tags.filter(r => r.name === tag).map(t => t.color)[0] ?? "ffffff")

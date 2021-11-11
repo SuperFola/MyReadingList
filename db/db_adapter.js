@@ -1,8 +1,19 @@
+const fs = require("fs")
+
 class Database {
-    constructor() {
-        // TODO change me to use an on-disk database instead of an in-memory one
-        this.db = require("./fake_db")
+    constructor(file, with_autoinc = true) {
+        this.path = `./schema/${file}.json`
+        this.with_autoinc = with_autoinc
+        this.db = require(this.path)
         this.auto_increment = Object.values(this.db).map(v => v.length).reduce((a, b) => a + b)
+    }
+
+    _saveToDisk() {
+        try {
+            fs.writeFileSync(this.path, JSON.stringify(this.db))
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     async select(table, req) {
@@ -14,23 +25,28 @@ class Database {
         return (await this.select(table, req)).length
     }
 
-    async insert(table, ...data) {
+    async insert(table, data, saveToDisk = true) {
         if (Object.prototype.hasOwnProperty.call(this.db, table)) {
-            return data.map(val => {
-                this.db[table].push({
-                    id: this.auto_increment,
-                    ...val
-                })
-                this.auto_increment += 1
-                return this.auto_increment - 1
-            })
+            const id = this.auto_increment
+
+            this.db[table].push(this.with_autoinc ? {
+                id: this.auto_increment,
+                ...data
+            } : data)
+            this.auto_increment += 1
+
+            if (saveToDisk) {
+                this._saveToDisk()
+            }
+
+            return this.with_autoinc ? id : true
         } else {
-            this.db[table] = data
-            return []
+            this.db[table] = [data]
+            return null
         }
     }
 
-    async update(table, filter, req) {
+    async update(table, filter, req, saveToDisk = true) {
         if (Object.prototype.hasOwnProperty.call(this.db, table)) {
             for (let idx = 0; idx < this.db[table].length; ++idx) {
                 const value = this.db[table][idx]
@@ -38,18 +54,26 @@ class Database {
                     this.db[table][idx] = await req(value)
                 }
             }
+
+            if (saveToDisk) {
+                this._saveToDisk()
+            }
         } else {
             throw new Error(`<db> Unknown table ${table} when trying to update db (columns: ${Object.keys(this.db).join(', ')})`)
         }
     }
 
-    async delete(table, req) {
+    async delete(table, req, saveToDisk = true) {
         if (Object.prototype.hasOwnProperty.call(this.db, table)) {
             this.db[table] = this.db[table].filter((value) => !req(value))
+
+            if (saveToDisk) {
+                this._saveToDisk()
+            }
         } else {
             throw new Error(`<db> Unknown table ${table} when trying to delete rows (columns: ${Object.keys(this.db).join(', ')})`)
         }
     }
 }
 
-module.exports = new Database()
+module.exports = new Database("users/folae")
