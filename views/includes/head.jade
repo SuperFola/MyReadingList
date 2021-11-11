@@ -1,8 +1,9 @@
 div.navbar
   ul
     li: a(class='active', href='/') Home
-    li: a(href='/articles') Articles
-    li: a(href='/tags') Tags
+    if userID
+      li: a(href='/articles') Articles
+      li: a(href='/tags') Tags
     li(style='float: right'): a(href='/about') About
     if userID
       li(style='float: right; background-color: darkred'): a(href='/disconnect') Log out
