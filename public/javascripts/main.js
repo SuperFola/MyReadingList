@@ -67,8 +67,6 @@ async function before_submit_article() {
     })
     const res = await req.json()
 
-    console.log(res)
-
     if (req.status === 200) {
         close_add_article()
         window.location.reload(true)

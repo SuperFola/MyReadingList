@@ -50,8 +50,6 @@ router.post('/signup', async (req, res) => {
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
         const rows = await db.select("users", val => val.name === req.body.username)
 
-        console.log(rows)
-
         if (rows.length === 0 && req.body.username !== "_base") {
             await db.insert("users", {
                 name: req.body.username,
