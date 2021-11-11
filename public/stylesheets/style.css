@@ -1,11 +1,11 @@
 html, body, .container {
-  height: 92%;
+  height: 100%;
 }
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   margin: 0;
-  min-height: 92%;
+  min-height: 100%;
 }
 
 .navbar ul {
@@ -40,7 +40,7 @@ body {
   position: relative;
   padding: 0 25px 0 25px;
   height: auto;
-  min-height: 92%;
+  min-height: 100%;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -243,14 +243,4 @@ button#add {
   font-size: large;
   color: antiquewhite;
   justify-content: center;
-}
-
-footer {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 8%;
-  text-align: center;
-  background-color: antiquewhite;
 }
