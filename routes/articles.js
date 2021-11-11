@@ -4,6 +4,7 @@ const parser = require('node-html-parser')
 const express = require('express')
 const fetch = require("node-fetch")
 const codes = require("../httpcodes")
+const auth = require('../db/auth')
 const router = express.Router()
 
 function pagger(page, length, condition = _ => true) {
@@ -19,7 +20,7 @@ async function calculateLength(url) {
     const page = await fetch(url)
     const pageContent = await page.text()
     const pageBody = parser.parse(pageContent).getElementsByTagName("body").toString()
-    const purifiedPageBody = pageBody.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi,"")
+    const purifiedPageBody = pageBody.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
     const wpm = 225
     const words = purifiedPageBody.trim().split(/\s+/).length
     const time = Math.ceil(words / wpm)
@@ -41,7 +42,7 @@ async function registerTags(tags) {
     })
 }
 
-router.get('/', async (req, res) => {
+router.get('/', auth.isAuthorized, async (req, res) => {
     const currentPage = parseInt(req.query.page ?? "1")
     const db = req.app.get("db")
     const total = await db.count('articles', _ => true)
@@ -56,7 +57,7 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/tagged/:tag', async (req, res) => {
+router.get('/tagged/:tag', auth.isAuthorized, async (req, res) => {
     const tag = req.params.tag
     const currentPage = parseInt(req.query.page ?? "1")
     const db = req.app.get("db")
@@ -72,7 +73,7 @@ router.get('/tagged/:tag', async (req, res) => {
     })
 })
 
-router.get('/list', async (req, res) => {
+router.get('/list', auth.isAuthorized, async (req, res) => {
     const currentPage = parseInt(req.query.page ?? "1")
     const quantity = parseInt(req.query.quantity ?? MaxPerPage)
     const db = req.app.get("db")
@@ -80,14 +81,14 @@ router.get('/list', async (req, res) => {
     res.json(await db.select('articles', pagger(currentPage, quantity)))
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
     const id = parseInt(req.params.id)
     const data = await db.select('articles', v => v.id === id)
     res.json(data[0])
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', auth.isAuthorized, async (req, res) => {
     const NeededParams = ["title", "url"]
 
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
@@ -102,7 +103,7 @@ router.post('/add', async (req, res) => {
                 read: req.body.read ?? false,
                 notes: req.body.notes ?? "",
                 length: await calculateLength(req.body.url),
-            })
+            }, false)
 
             if ("tags" in req.body) {
                 registerTags(req.body.tags)
@@ -126,7 +127,7 @@ router.post('/add', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth.isAuthorized, async (req, res) => {
     const id = parseInt(req.params.id)
     const db = req.app.get("db")
 
@@ -151,7 +152,7 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', auth.isAuthorized, async (req, res) => {
     const id = parseInt(req.params.id)
     const db = req.app.get("db")
 
@@ -176,6 +177,7 @@ router.patch('/:id', async (req, res) => {
 
                     return { ...val, ...to_update }
                 },
+                false,
             )
 
             if ("tags" in req.body) {

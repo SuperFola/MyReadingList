@@ -2,13 +2,14 @@ require("dotenv").config()
 
 const express = require('express')
 const codes = require("../httpcodes")
+const auth = require('../db/auth')
 const router = express.Router()
 
 function isValidColor(color) {
     return color.length === 6 && /^[0-9A-F]{6}$/i.test(color)
 }
 
-router.get('/', async (req, res) => {
+router.get('/', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
 
     res.render('tags', {
@@ -17,18 +18,18 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
     const data = await db.select('tags', v => v.name === req.params.id)
     res.json(data[0])
 })
 
-router.get('/list', async (req, res) => {
+router.get('/list', auth.isAuthorized, async (req, res) => {
     const db = req.app.get("db")
     res.json(await db.select('tags', _ => true))
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', auth.isAuthorized, async (req, res) => {
     const NeededParams = ["name", "color"]
 
     if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
@@ -67,7 +68,7 @@ router.post('/add', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth.isAuthorized, async (req, res) => {
     const id = req.params.id
     const db = req.app.get("db")
 
@@ -90,7 +91,7 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', auth.isAuthorized, async (req, res) => {
     const id = req.params.id
     const db = req.app.get("db")
 
