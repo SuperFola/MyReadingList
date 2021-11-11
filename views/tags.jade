@@ -4,10 +4,11 @@ block content
   h1 Tags
   - for (const data of tags)
     div.tags_list
-      span(style='background-color: #' + data.color).tag: a(href='/articles/tagged/' + data.name)= data.name
-      div.edit_note
-        span.pointer(onclick="edit_tag('" + data.name + "')") 📝&nbsp;&nbsp;
-        span.red.big.pointer(onclick="delete_tag('" + data.name + "')") &times;
+      div.tags_separated
+        span(style='background-color: #' + data.color).tag: a(href='/articles/tagged/' + data.name)= data.name
+        div.tag_edit
+          span.pointer(onclick="edit_tag('" + data.name + "')") 📝&nbsp;&nbsp;
+          span.red.big.pointer(onclick="delete_tag('" + data.name + "')") &times;
 
   if tags.length === 0
     p No tag

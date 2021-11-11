@@ -41,20 +41,31 @@ body {
   padding: 0 25px 0 25px;
   height: auto;
   min-height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 a {
   color: #00B7FF;
 }
 
+h1, p {
+  width: 100%;
+}
+
 .article {
   background-color: rgb(250, 248, 245);
-  margin-bottom: 1em;
+  margin: 1em;
   padding: 0.5em;
+  width: 26em;
 }
 
 .title {
   margin: 0;
+  display: block;
 }
 
 .title span {
@@ -90,7 +101,17 @@ a {
 
 .tags_list {
   margin-bottom: 1em;
-  position: relative;
+  width: 100%;
+}
+
+.tags_separated {
+  width: 18em;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.tag_edit {
+  display: inline-flex;
 }
 
 .tag {
@@ -138,6 +159,7 @@ a {
 
 .navigation {
   text-align: center;
+  width: 100%;
 }
 
 table {

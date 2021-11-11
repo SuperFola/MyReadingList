@@ -59,7 +59,7 @@ function add_article() {
         <table>
             <tr>
                 <td></td>
-                <td style="float: right" onclick="close_add_article()">&times;</td>
+                <td class="pointer delete_article" onclick="close_add_article()">&times;</td>
             </tr>
             <tr>
                 <td>
