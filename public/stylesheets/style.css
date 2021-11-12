@@ -66,16 +66,20 @@ h1, h2, p {
 .title {
   margin: 0;
   display: block;
+  position: relative;
 }
 
-.title span {
-  font-size: small;
+.title span.url {
+  font-size:x-small;
   color: #aaa;
   margin-left: 1em;
+  word-break: break-all;
 }
 
 .delete_article {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
   color: darkred !important;
 }
 
