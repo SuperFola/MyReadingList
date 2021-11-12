@@ -20,8 +20,15 @@ const FrozenArticlesAttributes = ["id", "length", "added_on"]
 async function calculateLength(url) {
     const page = await fetch(url)
     const pageContent = await page.text()
-    const pageBody = parser.parse(pageContent).getElementsByTagName("body").toString()
-    const purifiedPageBody = pageBody.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
+    const parsedPage = parser.parse(pageContent)
+    const pageBody = parsedPage.getElementsByTagName("body")
+    const purifiedPageBody = pageBody.toString()
+        .replace(parsedPage.querySelector('#comments').toString(),"")
+        .replace(parsedPage.querySelector('#comment').toString(),"")
+        .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi,"")
+        .replace(/<svg[\s\S]*?>[\s\S]*?<\/svg>/gi,"")
+        .replace(/<footer[\s\S]*?>[\s\S]*?<\/footer>/gi,"")
+        .replace(/<svg[\s\S]*?>[\s\S]*?<\/svg>/gi,"")
     const wpm = 225
     const words = purifiedPageBody.trim().split(/\s+/).length
     const time = Math.ceil(words / wpm)
