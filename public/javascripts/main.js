@@ -220,8 +220,9 @@ async function before_submit_tag() {
     const color = document.getElementById("color").value.slice(1)
 
     let old = ""
-    if (Object.prototype.hasOwnProperty.call(window, "edit_tag")) {
-        old = window.edit_tag
+    if (Object.prototype.hasOwnProperty.call(window, "old_tag")) {
+        old = window.old_tag
+        window.old_tag = ""
     }
 
     let req = null
@@ -266,6 +267,8 @@ function add_tag() {
     } else {
         return
     }
+
+    window.scrollTo(0, -9999);
 
     let new_node = document.createElement("div")
     new_node.setAttribute("id", "adding_tag")
@@ -378,7 +381,7 @@ async function edit_note(articleID) {
 async function edit_tag(tagID) {
     close_add_tag()
     add_tag()
-    window.edit_tag = tagID
+    window.old_tag = tagID
     document.getElementById("name").value = tagID
     const req = await fetch(`/tags/${tagID}`)
     const res = await req.json()
