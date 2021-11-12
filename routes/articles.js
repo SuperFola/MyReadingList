@@ -97,7 +97,9 @@ router.post('/add', auth.isAuthorized, async (req, res) => {
                 req.body.tags.forEach(async tag => {
                     try {
                         await addTag(db, req.session.user, tag, "ffffff")
-                    } catch (e) {}
+                    } catch (e) {
+                        console.error(e)
+                    }
                 })
             }
 
@@ -176,7 +178,9 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
                 req.body.tags.forEach(async tag => {
                     try {
                         await addTag(db, req.session.user, tag, "ffffff")
-                    } catch (e) {}
+                    } catch (e) {
+                        console.error(e)
+                    }
                 })
             }
 
