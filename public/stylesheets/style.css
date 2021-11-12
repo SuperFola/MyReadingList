@@ -61,6 +61,7 @@ h1, h2, p {
   margin: 1em;
   padding: 0.5em;
   width: 26em;
+  position: relative;
 }
 
 .title {
