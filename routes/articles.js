@@ -94,8 +94,10 @@ router.post('/add', auth.isAuthorized, async (req, res) => {
             })
 
             if ("tags" in req.body) {
-                req.body.tags.forEach(tag => {
-                    addTag(db, req.session.user, tag, "ffffff")
+                req.body.tags.forEach(async tag => {
+                    try {
+                        await addTag(db, req.session.user, tag, "ffffff")
+                    } catch (e) {}
                 })
             }
 
@@ -171,8 +173,10 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
             )
 
             if ("tags" in req.body) {
-                req.body.tags.forEach(tag => {
-                    addTag(db, req.session.user, tag, "ffffff")
+                req.body.tags.forEach(async tag => {
+                    try {
+                        await addTag(db, req.session.user, tag, "ffffff")
+                    } catch (e) {}
                 })
             }
 
