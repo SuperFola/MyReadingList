@@ -9,7 +9,11 @@
     "lint": "eslint *.js bin/www routes/**"
   },
   "nodemonConfig": {
-    "ignore": ["test/*", "views/*", "db/schema/*"]
+    "ignore": [
+      "test/*",
+      "views/*",
+      "db/schema/*"
+    ]
   },
   "repository": {
     "type": "git",

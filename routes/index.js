@@ -47,7 +47,7 @@ router.post('/signup', async (req, res) => {
     const db = req.app.get("db")("users")
 
     const NeededParams = ["username", "password"]
-    if (NeededParams.filter(p => p in req.body).length === NeededParams.length) {
+    if (NeededParams.filter(p => p in req.body && req.body[p].trim().length > 0).length === NeededParams.length) {
         const rows = await db.select("users", val => val.name === req.body.username)
 
         if (rows.length === 0 && req.body.username !== "_base") {
