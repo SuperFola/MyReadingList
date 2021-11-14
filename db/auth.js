@@ -32,7 +32,7 @@ module.exports = {
             return next()
         }
 
-        const err = new Error("Not authorized, please login")
+        const err = new Error("Not authorized, please log in")
         err.status = codes.errors.forbidden
         return next(err)
     },
