@@ -2,6 +2,8 @@
 
 An article reading list manager.
 
+![demo](demo.gif)
+
 ## API
 
 Parameters written in **bold text** are required.
