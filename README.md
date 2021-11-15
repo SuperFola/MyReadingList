@@ -2,7 +2,9 @@
 
 An article reading list manager.
 
-![demo](demo.gif)
+<a href=demo.gif><img src=demo.gif height=350px alt=demo></a>
+
+*click to enlarge*
 
 ## API
 
