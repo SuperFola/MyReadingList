@@ -56,6 +56,18 @@ h1, h2, p {
   width: 100%;
 }
 
+#page_title {
+  display: flex;
+}
+
+#page_title_suffix {
+  flex-grow: 2;
+}
+
+#content_selector {
+  align-self: stretch;
+}
+
 .article {
   background-color: rgb(250, 248, 245);
   margin: 1em;

@@ -341,7 +341,7 @@ async function edit_note(articleID) {
                 let span = document.createElement("span")
                 span.classList.add("tag")
                 span.style.backgroundColor = "ffffff"
-                span.innerHTML= `<a href="/articles/tagged/${tag_name}">${tag_name}</a>`
+                span.innerHTML = `<a href="/articles/tagged/${tag_name}">${tag_name}</a>`
 
                 create_delete_tag_btn(span)
 
@@ -386,4 +386,27 @@ async function edit_tag(tagID) {
     const req = await fetch(`/tags/${tagID}`)
     const res = await req.json()
     document.getElementById("color").value = "#" + res.color
+}
+
+document.onreadystatechange = () => {
+    if (document.readyState !== 'complete') {
+        return;
+    }
+
+    // executed once the page is loaded
+    let selector = document.getElementById("content_selector")
+    if (selector) {
+        selector.onchange = (event) => {
+            switch (event.target.value) {
+                case "all":
+                    break
+
+                case "read":
+                    break
+
+                case "unread":
+                    break
+            }
+        }
+    }
 }
