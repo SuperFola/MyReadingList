@@ -74,7 +74,7 @@ router.get('/tagged/:tag', auth.isAuthorized, async (req, res) => {
     const total = await db(`users/${req.session.user}`).count('articles', (v) => v.tags.includes(tag))
 
     const filter = (val) => {
-        filterOnArticleReadState(state) && val.tags.includes(tag)
+        return filterOnArticleReadState(state)(val) && val.tags.includes(tag)
     }
 
     res.render('articles', {

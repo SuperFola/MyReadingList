@@ -400,7 +400,10 @@ document.onreadystatechange = () => {
     if (selector) {
         selector.onchange = (event) => {
             if (States.includes(event.target.value)) {
-                document.location = `/articles?state=${event.target.value}`
+                let pathname = document.location.pathname
+                let slash_pos = document.location.pathname.substr(1).indexOf('/')
+                pathname = pathname.substr(0, slash_pos !== -1 ? slash_pos + 1 : pathname.length)
+                document.location = `${document.location.pathname}?state=${event.target.value}`
             }
         }
     }
