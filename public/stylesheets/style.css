@@ -154,6 +154,7 @@ h1, h2, p {
 
 .inner_notes {
   width: 90%;
+  white-space: pre-wrap;
 }
 
 .edit_note {
