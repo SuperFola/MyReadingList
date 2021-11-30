@@ -202,14 +202,16 @@ router.patch('/:id', auth.isAuthorized, async (req, res) => {
             )
 
             if ("tags" in req.body) {
-                req.body.tags.forEach(async tag => {
+                await Promise.all(req.body.tags.map(async tag => {
                     try {
                         await addTag(db, req.session.user, tag, "ffffff")
                     } catch (e) {
                         console.error(e)
                     }
-                })
+                }))
             }
+
+            db(`users/${req.session.user}`).saveToDisk()
 
             res.json({
                 status: "OK",

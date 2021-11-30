@@ -11,7 +11,7 @@ class Database {
         this.auto_increment = Object.values(this.db).map(v => v.length).reduce((a, b) => a + b)
     }
 
-    _saveToDisk() {
+    saveToDisk() {
         try {
             fs.writeFileSync(this.path, JSON.stringify(this.db))
         } catch (e) {
@@ -39,7 +39,7 @@ class Database {
             this.auto_increment += 1
 
             if (saveToDisk) {
-                this._saveToDisk()
+                this.saveToDisk()
             }
 
             return this.with_autoinc ? id : true
@@ -59,7 +59,7 @@ class Database {
             }
 
             if (saveToDisk) {
-                this._saveToDisk()
+                this.saveToDisk()
             }
         } else {
             throw new Error(`<db> Unknown table ${table} when trying to update db (columns: ${Object.keys(this.db).join(', ')})`)
@@ -71,7 +71,7 @@ class Database {
             this.db[table] = this.db[table].filter((value) => !req(value))
 
             if (saveToDisk) {
-                this._saveToDisk()
+                this.saveToDisk()
             }
         } else {
             throw new Error(`<db> Unknown table ${table} when trying to delete rows (columns: ${Object.keys(this.db).join(', ')})`)
