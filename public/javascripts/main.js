@@ -1,3 +1,5 @@
+const States = ["all", "read", "unread"]
+
 function focus_ce(node) {
     let setpos = document.createRange()
     let set = window.getSelection()
@@ -397,16 +399,17 @@ document.onreadystatechange = () => {
     let selector = document.getElementById("content_selector")
     if (selector) {
         selector.onchange = (event) => {
-            switch (event.target.value) {
-                case "all":
-                    break
-
-                case "read":
-                    break
-
-                case "unread":
-                    break
+            if (States.includes(event.target.value)) {
+                document.location = `/articles?state=${event.target.value}`
             }
         }
+    }
+
+    const url = new URL(document.location.href)
+    const state = url.searchParams.get("state")
+    if (States.includes(state)) {
+        Array.from(selector.options).forEach(el => {
+            el.selected = el.value === state
+        })
     }
 }
