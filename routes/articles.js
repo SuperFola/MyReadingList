@@ -14,7 +14,6 @@ function pagger(page, length, condition = _ => true) {
 }
 
 const MaxPerPage = 25
-
 const FrozenArticlesAttributes = ["id", "length", "added_on"]
 
 async function calculateLength(url) {
@@ -25,18 +24,34 @@ async function calculateLength(url) {
     const purifiedPageBody = pageBody.toString()
         .replace(parsedPage.querySelector('#comments')?.toString(), "")
         .replace(parsedPage.querySelector('#comment')?.toString(), "")
-        .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi,"")
-        .replace(/<svg[\s\S]*?>[\s\S]*?<\/svg>/gi,"")
-        .replace(/<footer[\s\S]*?>[\s\S]*?<\/footer>/gi,"")
-        .replace(/<svg[\s\S]*?>[\s\S]*?<\/svg>/gi,"")
+        .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
+        .replace(/<svg[\s\S]*?>[\s\S]*?<\/svg>/gi, "")
+        .replace(/<footer[\s\S]*?>[\s\S]*?<\/footer>/gi, "")
+        .replace(/<svg[\s\S]*?>[\s\S]*?<\/svg>/gi, "")
     const wpm = 225
     const words = purifiedPageBody.trim().split(/\s+/).length
     const time = Math.ceil(words / wpm)
     return `${time} min`
 }
 
+function filterOnArticleReadState(state) {
+    return function (val) {
+        if (state === "all") {
+            return true
+        }
+
+        if (state === "unread" && !val.read) {
+            return true
+        } else if (state === "read" && val.read) {
+            return true
+        }
+        return false
+    }
+}
+
 router.get('/', auth.isAuthorized, async (req, res) => {
     const currentPage = parseInt(req.query.page ?? "1")
+    const state = req.query.state ?? "all"
     const db = req.app.get("db")
     const total = await db(`users/${req.session.user}`).count('articles', _ => true)
 
@@ -44,7 +59,7 @@ router.get('/', auth.isAuthorized, async (req, res) => {
         title: process.env.TITLE,
         userID: req.session.user,
         title_suffix: "",
-        articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage)),
+        articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage, filterOnArticleReadState(state))),
         tags: await db(`users/${req.session.user}`).select('tags', _ => true),
         currentPage: currentPage,
         totalPages: Math.ceil(total / MaxPerPage),
@@ -54,14 +69,19 @@ router.get('/', auth.isAuthorized, async (req, res) => {
 router.get('/tagged/:tag', auth.isAuthorized, async (req, res) => {
     const tag = req.params.tag
     const currentPage = parseInt(req.query.page ?? "1")
+    const state = req.query.state ?? "all"
     const db = req.app.get("db")
     const total = await db(`users/${req.session.user}`).count('articles', (v) => v.tags.includes(tag))
+
+    const filter = (val) => {
+        return filterOnArticleReadState(state)(val) && val.tags.includes(tag)
+    }
 
     res.render('articles', {
         title: process.env.TITLE,
         userID: req.session.user,
         title_suffix: `tagged '${tag}'`,
-        articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage, (v) => v.tags.includes(tag))),
+        articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage, filter)),
         tags: await db(`users/${req.session.user}`).select('tags', _ => true),
         currentPage: currentPage,
         totalPages: Math.ceil(total / MaxPerPage),

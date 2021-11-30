@@ -1,3 +1,5 @@
+const States = ["all", "read", "unread"]
+
 function focus_ce(node) {
     let setpos = document.createRange()
     let set = window.getSelection()
@@ -341,7 +343,7 @@ async function edit_note(articleID) {
                 let span = document.createElement("span")
                 span.classList.add("tag")
                 span.style.backgroundColor = "ffffff"
-                span.innerHTML= `<a href="/articles/tagged/${tag_name}">${tag_name}</a>`
+                span.innerHTML = `<a href="/articles/tagged/${tag_name}">${tag_name}</a>`
 
                 create_delete_tag_btn(span)
 
@@ -386,4 +388,31 @@ async function edit_tag(tagID) {
     const req = await fetch(`/tags/${tagID}`)
     const res = await req.json()
     document.getElementById("color").value = "#" + res.color
+}
+
+document.onreadystatechange = () => {
+    if (document.readyState !== 'complete') {
+        return;
+    }
+
+    // executed once the page is loaded
+    let selector = document.getElementById("content_selector")
+    if (selector) {
+        selector.onchange = (event) => {
+            if (States.includes(event.target.value)) {
+                let pathname = document.location.pathname
+                let slash_pos = document.location.pathname.substr(1).indexOf('/')
+                pathname = pathname.substr(0, slash_pos !== -1 ? slash_pos + 1 : pathname.length)
+                document.location = `${document.location.pathname}?state=${event.target.value}`
+            }
+        }
+    }
+
+    const url = new URL(document.location.href)
+    const state = url.searchParams.get("state")
+    if (States.includes(state)) {
+        Array.from(selector.options).forEach(el => {
+            el.selected = el.value === state
+        })
+    }
 }

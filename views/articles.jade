@@ -1,7 +1,13 @@
 extends layout
 
 block content
-  h1 Articles #{title_suffix}
+  h1#page_title
+    span#page_title_suffix Articles #{title_suffix}
+    select#content_selector
+      option(value="all") All
+      option(value="read") Read
+      option(value="unread") Unread
+
   - for (const data of articles)
     div(id="article-" + data.id).article
       h2.title
