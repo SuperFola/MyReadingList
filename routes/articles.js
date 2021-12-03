@@ -53,7 +53,7 @@ router.get('/', auth.isAuthorized, async (req, res) => {
     const currentPage = parseInt(req.query.page ?? "1")
     const state = req.query.state ?? "all"
     const db = req.app.get("db")
-    const total = await db(`users/${req.session.user}`).count('articles', _ => true)
+    const total = await db(`users/${req.session.user}`).count('articles', filterOnArticleReadState(state))
 
     res.render('articles', {
         title: process.env.TITLE,
@@ -71,11 +71,11 @@ router.get('/tagged/:tag', auth.isAuthorized, async (req, res) => {
     const currentPage = parseInt(req.query.page ?? "1")
     const state = req.query.state ?? "all"
     const db = req.app.get("db")
-    const total = await db(`users/${req.session.user}`).count('articles', (v) => v.tags.includes(tag))
 
     const filter = (val) => {
         return filterOnArticleReadState(state)(val) && val.tags.includes(tag)
     }
+    const total = await db(`users/${req.session.user}`).count('articles', filter)
 
     res.render('articles', {
         title: process.env.TITLE,
