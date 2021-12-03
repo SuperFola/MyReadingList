@@ -81,7 +81,7 @@ router.get('/tagged/:tag', auth.isAuthorized, async (req, res) => {
         title: process.env.TITLE,
         userID: req.session.user,
         title_suffix: `tagged '${tag}'`,
-        articles: await db(`users/${req.session.user}`).select('articles', pagger(currentPage, MaxPerPage, filter)),
+        articles: (await db(`users/${req.session.user}`).select('articles', filter)).filter(pagger(currentPage, MaxPerPage)),
         tags: await db(`users/${req.session.user}`).select('tags', _ => true),
         currentPage: currentPage,
         totalPages: Math.ceil(total / MaxPerPage),
