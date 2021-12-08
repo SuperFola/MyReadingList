@@ -4,14 +4,20 @@
   "description": "A website to help you handle your reading list",
   "icons": [
     {
-      "src": "/images/favicon-3.png",
+      "src": "/images/favicon.png",
       "sizes": "48x48",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/images/favicon.svg",
       "sizes": "150x150",
       "type": "image/svg+xml"
+    },
+    {
+      "src": "/images/splash.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "start_url": "/",
