@@ -1,0 +1,21 @@
+{
+  "name": "MyReadingList",
+  "short_name": "Myrel",
+  "description": "A website to help you handle your reading list",
+  "icons": [
+    {
+      "src": "/images/favicon-3.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/favicon.svg",
+      "sizes": "150x150",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "display": "fullscreen",
+  "theme_color": "#444444",
+  "background_color": "#444444"
+}
