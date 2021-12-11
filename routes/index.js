@@ -116,8 +116,10 @@ router.post('/login', async (req, res) => {
     })
 })
 
-router.get('/disconnect', auth.isAuthorized, async (req, res) => {
-    req.session.user = undefined
+router.get('/disconnect', async (req, res) => {
+    if (req.session) {
+        req.session.user = undefined
+    }
     res.redirect('/')
 })
 
