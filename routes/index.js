@@ -95,9 +95,9 @@ router.post('/login', async (req, res) => {
                 val => {
                     return {
                         ...val,
-                        tokens: (val.tokens ?? []).filter(t => t.expireAt > timestamp).concat({
+                        tokens: (val.tokens ?? []).filter(t => parseInt(t.expireAt) > timestamp).concat({
                             value: token,
-                            expireAt: timestamp + process.env.MAX_TOKEN_LIFETIME_SEC,
+                            expireAt: timestamp + parseInt(process.env.MAX_TOKEN_LIFETIME_SEC),
                         }),
                     }
                 }
