@@ -27,6 +27,9 @@ app.use(session({
     secret: process.env.SECRET,
     resave: true,
     saveUninitialized: false,
+    cookie: {
+        maxAge: 15 /*days*/ * 24 /*hours*/ * 60 /*minutes*/ * 60 /*seconds*/ * 1000,  // in milliseconds
+    },
 }))
 
 app.use('/', require('./routes/index').router)
