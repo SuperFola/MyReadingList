@@ -74,6 +74,7 @@ h1, h2, p {
   padding: 0.5em;
   width: 26em;
   position: relative;
+  max-height: 15em;
 }
 
 .title {
@@ -167,6 +168,8 @@ h1, h2, p {
 .inner_notes {
   width: 90%;
   white-space: pre-wrap;
+  overflow-y: scroll;
+  max-height: 8em;
 }
 
 .edit_note {
