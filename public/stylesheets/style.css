@@ -119,7 +119,9 @@ h1, h2, p {
 
 .tags_list {
   margin-bottom: 1em;
-  width: 100%;
+  margin-right: 2em;
+  padding-right: 0.5em;
+  background-color: #f0f5f5;
 }
 
 .tags_separated {
